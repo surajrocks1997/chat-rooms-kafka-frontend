@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { setUserName } from "../Actions/userData";
+import { useNavigate } from "react-router-dom";
 
 const WelcomePage = ({ setUserName }) => {
     const [name, setName] = useState("");
+    const navigate = useNavigate();
 
     const updateName = (e) => {
         setName(e.target.value.toUpperCase());
@@ -13,6 +15,7 @@ const WelcomePage = ({ setUserName }) => {
     const submit = () => {
         if (!name || name === "") return;
         setUserName(name);
+        navigate("/chat-room");
     };
 
     return (
