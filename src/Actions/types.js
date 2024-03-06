@@ -1,2 +1,4 @@
 export const USER_INFO = "USER_INFO";
-export const MESSAGE = "MESSAGE";
+export const ADD_MESSAGE = "MESSAGE";
+export const SET_SUBSCRIBED_CHAT_ROOMS = "SET_SUBSCRIBED_CHAT_ROOMS";
+export const CREATE_CHAT_ROOMS = "CREATE_CHAT_ROOMS";

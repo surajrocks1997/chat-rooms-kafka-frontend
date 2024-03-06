@@ -15,7 +15,7 @@ const userInfo = (state = initState, action) => {
                 username: payload,
             };
         default:
-            return initState;
+            return state;
     }
 };
 

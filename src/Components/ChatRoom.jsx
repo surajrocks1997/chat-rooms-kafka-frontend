@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import webSocketService from "../class/WebSocketService";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { MESSAGE } from "../Actions/types";
+import { addMessage, setSubscribedChatRooms } from "../Actions/chat-rooms";
+import ChatBox from "./ChatBox";
 
-const ChatRoom = ({ userInfo: { username } }) => {
+const ChatRoom = ({
+    userInfo: { username },
+    addMessage,
+    setSubscribedChatRooms,
+    chatRooms: { subscribedChatRooms },
+}) => {
     const [stompClient, setStompClient] = useState(null);
-    const dispatch = useDispatch();
     const [chatText, setChatText] = useState("");
 
     useEffect(() => {
@@ -17,14 +22,18 @@ const ChatRoom = ({ userInfo: { username } }) => {
     const onMessageRecieved = (payload) => {
         console.log("FROM ON MESSAGE RECIEVED");
         var message = JSON.parse(payload.body);
-        dispatch({
-            type: MESSAGE,
-            payload: message,
-        });
+        addMessage(message);
     };
 
     const subscribeChatRoom = () => {
-        stompClient.subscribe("/topic/chat-room-1", onMessageRecieved);
+        subscribedChatRooms.forEach((room) =>
+            stompClient.subscribe(`/topic/${room}`, onMessageRecieved)
+        );
+    };
+
+    const loginAndFetchSubscribedChatRooms = () => {
+        const dataFromDatabase_subscribedRooms = ["chat-room-1"];
+        setSubscribedChatRooms(dataFromDatabase_subscribedRooms);
     };
 
     const sendMessage = () => {
@@ -34,9 +43,7 @@ const ChatRoom = ({ userInfo: { username } }) => {
             JSON.stringify({
                 username,
                 message: chatText,
-                details: {
-                    chatRoomName: "chat-room-1",
-                },
+                chatRoomName: "chat-room-1",
             })
         );
         setChatText("");
@@ -44,31 +51,46 @@ const ChatRoom = ({ userInfo: { username } }) => {
 
     return (
         <div>
-            <h1>Chat Room</h1>
-            <input
-                type="button"
-                value="SUBSCRIBE"
-                onClick={subscribeChatRoom}
-            />
-            <hr />
-            <input
-                type="text"
-                value={chatText}
-                onChange={(e) => setChatText(e.target.value)}
-                placeholder="Please Type Some Message here!!"
-                size="50"
-            />
-            <input type="button" value="Send" onClick={sendMessage} />
+            <div className="room-list">
+                <h1>Chat Room</h1>
+                <input
+                    type="button"
+                    value="FETCH CHAT ROOMS"
+                    onClick={loginAndFetchSubscribedChatRooms}
+                />{" "}
+                <input
+                    type="button"
+                    value="SUBSCRIBE"
+                    onClick={subscribeChatRoom}
+                />
+                <hr />
+            </div>
+            <div className="chat-box">
+                <ChatBox />
+                <input
+                    type="text"
+                    value={chatText}
+                    onChange={(e) => setChatText(e.target.value)}
+                    placeholder="Please Type Some Message here!!"
+                    size="50"
+                />
+                <input type="button" value="Send" onClick={sendMessage} />
+            </div>
         </div>
     );
 };
 
 ChatRoom.propTypes = {
     username: PropTypes.string,
+    addMessage: PropTypes.func,
+    setSubscribedChatRooms: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
     userInfo: state.userInfo,
+    chatRooms: state.chatRooms,
 });
 
-export default connect(mapStateToProps, {})(ChatRoom);
+export default connect(mapStateToProps, { addMessage, setSubscribedChatRooms })(
+    ChatRoom
+);
