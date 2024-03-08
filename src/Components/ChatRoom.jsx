@@ -32,18 +32,18 @@ const ChatRoom = ({
     };
 
     const loginAndFetchSubscribedChatRooms = () => {
-        const dataFromDatabase_subscribedRooms = ["chat-room-1"];
+        const dataFromDatabase_subscribedRooms = ["testTopic"];
         setSubscribedChatRooms(dataFromDatabase_subscribedRooms);
     };
 
     const sendMessage = () => {
         stompClient.send(
-            "/app/chatRoom/chat-room-1",
+            "/app/chatRoom/testTopic",
             {},
             JSON.stringify({
                 username,
                 message: chatText,
-                chatRoomName: "chat-room-1",
+                chatRoomName: "testTopic",
             })
         );
         setChatText("");
