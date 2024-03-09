@@ -5,7 +5,7 @@ import {
 } from "../Actions/types";
 
 const initState = {
-    activeChatRoom: "chat-room-1",
+    activeChatRoom: "testTopic",
     isLoading: false,
     subscribedChatRooms: [],
     chatRoomDetails: {},
