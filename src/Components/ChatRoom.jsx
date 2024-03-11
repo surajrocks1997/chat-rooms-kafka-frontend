@@ -32,12 +32,13 @@ const ChatRoom = ({
         };
 
         stompClient.subscribe(
-            `/topic/chatRoom/${activeChatRoom}`,
-            onMessageRecieved
+            `/topic/chatRoom.${activeChatRoom}`,
+            onMessageRecieved,
+            { id: activeChatRoom }
         );
 
         return () => {
-            stompClient.unsubscribe(`/topic/chatRoom/${activeChatRoom}`);
+            stompClient.unsubscribe(activeChatRoom);
             clearActiveChatRoomState();
         };
     }, []);
