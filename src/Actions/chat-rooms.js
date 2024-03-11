@@ -1,7 +1,8 @@
 import {
     ADD_MESSAGE,
-    CREATE_CHAT_ROOMS,
-    SET_SUBSCRIBED_CHAT_ROOMS,
+    CLEAR_CHAT_ROOM,
+    LOADING_CHAT_ROOM,
+    SET_ACTIVE_CHAT_ROOM,
 } from "./types";
 
 export const addMessage = (message) => (dispatch) => {
@@ -11,16 +12,35 @@ export const addMessage = (message) => (dispatch) => {
     });
 };
 
-export const setSubscribedChatRooms = (rooms) => (dispatch) => {
+export const setActiveChatRoom = (roomName) => (dispatch) => {
     dispatch({
-        type: SET_SUBSCRIBED_CHAT_ROOMS,
-        payload: rooms,
+        type: SET_ACTIVE_CHAT_ROOM,
+        payload: roomName,
     });
+};
 
-    rooms.forEach((room) =>
-        dispatch({
-            type: CREATE_CHAT_ROOMS,
-            payload: room,
-        })
+export const setRequiredChatState = (roomName) => (dispatch) => {
+    //isloading true
+    //update chatRoomDetails
+    //is loading false
+    dispatch({
+        type: LOADING_CHAT_ROOM,
+        payload: true,
+    });
+    // fetch 40 messages from databased with this roomName
+    setTimeout(
+        () =>
+            dispatch({
+                type: LOADING_CHAT_ROOM,
+                payload: false,
+            }),
+        2000
     );
+};
+
+export const clearActiveChatRoomState = () => (dispatch) => {
+    dispatch({
+        type: CLEAR_CHAT_ROOM,
+        payload: null,
+    });
 };

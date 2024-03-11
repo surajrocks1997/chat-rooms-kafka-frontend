@@ -1,50 +1,40 @@
 import {
     ADD_MESSAGE,
-    CREATE_CHAT_ROOMS,
-    SET_SUBSCRIBED_CHAT_ROOMS,
+    CLEAR_CHAT_ROOM,
+    LOADING_CHAT_ROOM,
+    SET_ACTIVE_CHAT_ROOM,
 } from "../Actions/types";
 
 const initState = {
-    activeChatRoom: "testTopic",
+    activeChatRoom: null,
     isLoading: false,
-    subscribedChatRooms: [],
-    chatRoomDetails: {},
+    messages: [],
 };
 
 const chatRooms = (state = initState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case LOADING_CHAT_ROOM:
+            return {
+                ...state,
+                isLoading: payload,
+            };
+        case SET_ACTIVE_CHAT_ROOM:
+            return {
+                ...state,
+                activeChatRoom: payload,
+            };
         case ADD_MESSAGE:
             return {
                 ...state,
-                chatRoomDetails: {
-                    [payload.chatRoomName]: {
-                        ...state.chatRoomDetails[payload.chatRoomName],
-                        messages: [
-                            ...state.chatRoomDetails[payload.chatRoomName].messages,
-                            {
-                                username: payload.username,
-                                message: payload.message,
-                                timestamp: payload.timestamp,
-                            },
-                        ],
-                    },
-                },
+                messages: [...state.messages, payload],
             };
-        case CREATE_CHAT_ROOMS:
+        case CLEAR_CHAT_ROOM:
             return {
                 ...state,
-                chatRoomDetails: {
-                    [payload]: {
-                        messages: [],
-                    },
-                },
-            };
-        case SET_SUBSCRIBED_CHAT_ROOMS:
-            return {
-                ...state,
-                subscribedChatRooms: payload,
+                activeChatRoom: null,
+                messages: [],
             };
 
         default:

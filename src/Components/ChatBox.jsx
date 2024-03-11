@@ -1,14 +1,11 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const ChatBox = ({ chatRooms: { activeChatRoom, chatRoomDetails } }) => {
-    var activeChatRoomMessages =
-        chatRoomDetails[activeChatRoom]?.messages || [];
+const ChatBox = ({ chatRooms: { activeChatRoom, messages } }) => {
 
     return (
         <div className="chat-page">
-            <h1>Chat Box Here</h1>
-            {activeChatRoomMessages.map((message) => (
+            {messages.map((message) => (
                 <div key={message.timestamp}>
                     <h3>{message.username}</h3>
                     <p>{message.message}</p>

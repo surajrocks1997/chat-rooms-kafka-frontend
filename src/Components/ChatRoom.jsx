@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import webSocketService from "../class/WebSocketService";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addMessage, setSubscribedChatRooms } from "../Actions/chat-rooms";
+import {
+    addMessage,
+    clearActiveChatRoomState,
+    setRequiredChatState,
+} from "../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
+import Spinner from "./Spinner/Spinner";
 
 const ChatRoom = ({
     userInfo: { username },
     addMessage,
-    setSubscribedChatRooms,
-    chatRooms: { subscribedChatRooms },
+    chatRooms: { isLoading, activeChatRoom },
+    setRequiredChatState,
+    clearActiveChatRoomState,
 }) => {
     const [stompClient, setStompClient] = useState(null);
     const [chatText, setChatText] = useState("");
@@ -17,33 +23,33 @@ const ChatRoom = ({
     useEffect(() => {
         const stompClient = webSocketService.getStompClient();
         setStompClient(stompClient);
-    }, []);
+        setRequiredChatState(activeChatRoom);
 
-    const onMessageRecieved = (payload) => {
-        console.log("FROM ON MESSAGE RECIEVED");
-        var message = JSON.parse(payload.body);
-        addMessage(message);
-    };
+        const onMessageRecieved = (payload) => {
+            console.log("FROM ON MESSAGE RECIEVED");
+            var message = JSON.parse(payload.body);
+            addMessage(message);
+        };
 
-    const subscribeChatRoom = () => {
-        subscribedChatRooms.forEach((room) =>
-            stompClient.subscribe(`/topic/${room}`, onMessageRecieved)
+        stompClient.subscribe(
+            `/topic/chatRoom/${activeChatRoom}`,
+            onMessageRecieved
         );
-    };
 
-    const loginAndFetchSubscribedChatRooms = () => {
-        const dataFromDatabase_subscribedRooms = ["testTopic"];
-        setSubscribedChatRooms(dataFromDatabase_subscribedRooms);
-    };
+        return () => {
+            stompClient.unsubscribe(`/topic/chatRoom/${activeChatRoom}`);
+            clearActiveChatRoomState();
+        };
+    }, []);
 
     const sendMessage = () => {
         stompClient.send(
-            "/app/chatRoom/testTopic",
+            `/app/chatRoom/${activeChatRoom}`,
             {},
             JSON.stringify({
                 username,
                 message: chatText,
-                chatRoomName: "testTopic",
+                chatRoomName: activeChatRoom,
             })
         );
         setChatText("");
@@ -52,30 +58,24 @@ const ChatRoom = ({
     return (
         <div>
             <div className="room-list">
-                <h1>Chat Room</h1>
-                <input
-                    type="button"
-                    value="FETCH CHAT ROOMS"
-                    onClick={loginAndFetchSubscribedChatRooms}
-                />{" "}
-                <input
-                    type="button"
-                    value="SUBSCRIBE"
-                    onClick={subscribeChatRoom}
-                />
+                <h1>{activeChatRoom} - Chat Room</h1>
                 <hr />
             </div>
-            <div className="chat-box">
-                <ChatBox />
-                <input
-                    type="text"
-                    value={chatText}
-                    onChange={(e) => setChatText(e.target.value)}
-                    placeholder="Please Type Some Message here!!"
-                    size="50"
-                />
-                <input type="button" value="Send" onClick={sendMessage} />
-            </div>
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <div className="chat-box">
+                    <ChatBox />
+                    <input
+                        type="text"
+                        value={chatText}
+                        onChange={(e) => setChatText(e.target.value)}
+                        placeholder="Please Type Some Message here!!"
+                        size="50"
+                    />
+                    <input type="button" value="Send" onClick={sendMessage} />
+                </div>
+            )}
         </div>
     );
 };
@@ -83,7 +83,8 @@ const ChatRoom = ({
 ChatRoom.propTypes = {
     username: PropTypes.string,
     addMessage: PropTypes.func,
-    setSubscribedChatRooms: PropTypes.func,
+    setRequiredChatState: PropTypes.func,
+    clearActiveChatRoomState: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
@@ -91,6 +92,8 @@ const mapStateToProps = (state) => ({
     chatRooms: state.chatRooms,
 });
 
-export default connect(mapStateToProps, { addMessage, setSubscribedChatRooms })(
-    ChatRoom
-);
+export default connect(mapStateToProps, {
+    addMessage,
+    setRequiredChatState,
+    clearActiveChatRoomState,
+})(ChatRoom);

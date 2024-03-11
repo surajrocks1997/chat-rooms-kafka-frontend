@@ -15,7 +15,7 @@ const WelcomePage = ({ setUserName }) => {
     const submit = () => {
         if (!name || name === "") return;
         setUserName(name);
-        navigate("/chat-room");
+        navigate("/chatRooms");
     };
 
     return (
