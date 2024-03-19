@@ -3,13 +3,13 @@ import "./App.css";
 import WelcomePage from "./Components/WelcomePage";
 import ChatRoom from "./Components/ChatRoom";
 import ChatShowRoom from "./Components/ChatShowRoom";
-import Landing from "./Components/Landing";
+import Insights from "./Components/Insights";
 
 const Layout = ({ children }) => {
     return (
         <div className="container">
             <div className="insights left-container">
-                <Landing />
+                <Insights />
             </div>
 
             <div className="right-container">{children}</div>
