@@ -15,7 +15,6 @@ const ChatShowRoom = ({ setActiveChatRoom }) => {
     ];
     return (
         <div>
-            <h1>Chat Rooms For You!</h1>
             <p>Select a Chat Room Topic you wish to chat on.</p>
             <div className="grid-container">
                 {chatRoomTopics.map((topic, index) => (

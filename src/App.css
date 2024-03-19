@@ -1,16 +1,26 @@
 .App {
   text-align: center;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  width: 100%;
+}
+
+.left-container .right-container {
+  flex: 1;
+}
+
 .grid-container {
   display: grid;
   margin: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 1fr for equal width */
-  grid-auto-rows: 325px; /* Equal height */
-  /* gap: 10px; Spacing between grid items */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-auto-rows: 290px; 
 }
 
 .grid-item {
-  background-color: #f0f0f0; /* Placeholder background color */
+  background-color: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
