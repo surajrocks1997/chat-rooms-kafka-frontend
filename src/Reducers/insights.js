@@ -13,7 +13,7 @@ const initState = {
         News: 0,
         Random: 0,
     },
-    wordCountData: {},
+    wordCountData: [],
 };
 
 const insights = (state = initState, action) => {
@@ -29,12 +29,29 @@ const insights = (state = initState, action) => {
                 },
             };
         case UPDATE_WORD_COUNT_DATA:
+            const index = state.wordCountData.findIndex(
+                (item) => item.word === payload.word
+            );
+            let newWords;
+            if (index !== -1) {
+                const updatedWord = {
+                    ...state.wordCountData[index],
+                    count: payload.count,
+                };
+                newWords = [
+                    ...state.wordCountData.slice(0, index),
+                    updatedWord,
+                    ...state.wordCountData.slice(index + 1),
+                ];
+            } else {
+                newWords = [...state.wordCountData, payload];
+            }
+
+            newWords.sort((a, b) => b.count - a.count);
+            const finalData = newWords.slice(0, 10);
             return {
                 ...state,
-                wordCountData: {
-                    ...state.wordCountData,
-                    [payload.word]: payload.count,
-                },
+                wordCountData: finalData,
             };
         default:
             return state;

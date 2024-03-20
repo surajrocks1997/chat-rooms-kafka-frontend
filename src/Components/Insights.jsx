@@ -10,8 +10,7 @@ import { messageSse, wordCountSse } from "../config/config";
 const Insights = ({
     updatePerChatRoomData,
     updateWordCountData,
-    insights: { perChatRoomData },
-    wordCountData,
+    insights: { perChatRoomData, wordCountData },
 }) => {
     useEffect(() => {
         console.log("From Landing Page");
@@ -61,7 +60,7 @@ const Insights = ({
     return (
         <div>
             <h1>My Insights here</h1>
-            <h2>Message Data: </h2>
+            <h2>Message Count Per Room </h2>
             <p>Sports : {perChatRoomData.Sports}</p>
             <p>Technology : {perChatRoomData.Technology}</p>
             <p>Science : {perChatRoomData.Science}</p>
@@ -71,6 +70,9 @@ const Insights = ({
             <p>Random : {perChatRoomData.Random}</p>
 
             <h2>Top 10 Trending Words</h2>
+            {wordCountData.map(({ word, count }, index) => (
+                <p key={index}>{word} : {count}</p>
+            ))}
         </div>
     );
 };
@@ -79,11 +81,11 @@ Insights.propTypes = {
     updatePerChatRoomData: PropTypes.func,
     perChatRoomData: PropTypes.object,
     updateWordCountData: PropTypes.func,
+    wordCountData: PropTypes.array,
 };
 
 const mapStateToProps = (state) => ({
     insights: state.insights,
-    wordCountData: state.wordCountData,
 });
 
 export default connect(mapStateToProps, {
