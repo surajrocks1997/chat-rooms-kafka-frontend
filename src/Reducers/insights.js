@@ -4,15 +4,16 @@ import {
 } from "../Actions/types";
 
 const initState = {
-    perChatRoomData: {
-        Sports: 0,
-        Technology: 0,
-        Science: 0,
-        Automobile: 0,
-        Gadgets: 0,
-        News: 0,
-        Random: 0,
-    },
+    perChatRoomData: [],
+    // perChatRoomData: {
+    //     Sports: 0,
+    //     Technology: 0,
+    //     Science: 0,
+    //     Automobile: 0,
+    //     Gadgets: 0,
+    //     News: 0,
+    //     Random: 0,
+    // },
     wordCountData: [],
 };
 
@@ -21,13 +22,36 @@ const insights = (state = initState, action) => {
 
     switch (type) {
         case UPDATE_PER_CHAT_ROOM_DATA:
+            let myIndex = state.perChatRoomData.findIndex(
+                (item) => item.chatRoomName === payload.chatRoomName
+            );
+            let newData;
+            if (myIndex !== -1) {
+                const updatedData = {
+                    ...state.perChatRoomData[myIndex],
+                    count: payload.count,
+                };
+                newData = [
+                    ...state.perChatRoomData.slice(0, myIndex),
+                    updatedData,
+                    ...state.perChatRoomData.slice(myIndex + 1),
+                ];
+            } else {
+                newData = [...state.perChatRoomData, payload];
+            }
+            newData.sort((a, b) => b.count - a.count);
+
             return {
                 ...state,
-                perChatRoomData: {
-                    ...state.perChatRoomData,
-                    [payload.chatRoomName]: payload.count,
-                },
+                perChatRoomData: newData,
             };
+        // return {
+        //     ...state,
+        //     perChatRoomData: {
+        //         ...state.perChatRoomData,
+        //         [payload.chatRoomName]: payload.count,
+        //     },
+        // };
         case UPDATE_WORD_COUNT_DATA:
             const index = state.wordCountData.findIndex(
                 (item) => item.word === payload.word
@@ -51,7 +75,7 @@ const insights = (state = initState, action) => {
             const finalData = newWords.slice(0, 10);
             return {
                 ...state,
-                wordCountData: finalData,
+                wordCountData: finalData.sort((a, b) => a.count - b.count),
             };
         default:
             return state;

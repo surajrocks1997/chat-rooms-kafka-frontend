@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "./Insights.css";
 import {
     updatePerChatRoomData,
     updateWordCountData,
 } from "../Actions/insights";
 import { messageSse, wordCountSse } from "../config/config";
+import GraphsInsight from "./GraphsInsight";
 
 const Insights = ({
     updatePerChatRoomData,
@@ -59,20 +61,9 @@ const Insights = ({
 
     return (
         <div>
-            <h1>My Insights here</h1>
-            <h2>Message Count Per Room </h2>
-            <p>Sports : {perChatRoomData.Sports}</p>
-            <p>Technology : {perChatRoomData.Technology}</p>
-            <p>Science : {perChatRoomData.Science}</p>
-            <p>Automobile : {perChatRoomData.Automobile}</p>
-            <p>Gadgets : {perChatRoomData.Gadgets}</p>
-            <p>News : {perChatRoomData.News}</p>
-            <p>Random : {perChatRoomData.Random}</p>
-
-            <h2>Top 10 Trending Words</h2>
-            {wordCountData.map(({ word, count }, index) => (
-                <p key={index}>{word} : {count}</p>
-            ))}
+            <div className="graphs-container">
+                <GraphsInsight />
+            </div>
         </div>
     );
 };
