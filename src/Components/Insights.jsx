@@ -5,6 +5,7 @@ import "./Insights.css";
 import {
     updatePerChatRoomData,
     updateWordCountData,
+    getInitData,
 } from "../Actions/insights";
 import { messageSse, wordCountSse } from "../config/config";
 import GraphsInsight from "./GraphsInsight";
@@ -12,9 +13,11 @@ import GraphsInsight from "./GraphsInsight";
 const Insights = ({
     updatePerChatRoomData,
     updateWordCountData,
+    getInitData,
     insights: { perChatRoomData, wordCountData },
 }) => {
     useEffect(() => {
+        getInitData();
         console.log("From Landing Page");
 
         messageSse.addEventListener("messageEvent", (e) => {
@@ -73,6 +76,7 @@ Insights.propTypes = {
     perChatRoomData: PropTypes.object,
     updateWordCountData: PropTypes.func,
     wordCountData: PropTypes.array,
+    getInitData: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
@@ -82,4 +86,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     updatePerChatRoomData,
     updateWordCountData,
+    getInitData,
 })(Insights);

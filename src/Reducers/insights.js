@@ -1,6 +1,8 @@
 import {
     UPDATE_PER_CHAT_ROOM_DATA,
     UPDATE_WORD_COUNT_DATA,
+    SET_INIT_INSIGHT_MESSAGE_DATA,
+    SET_INIT_INSIGHT_WORD_DATA,
 } from "../Actions/types";
 
 const initState = {
@@ -21,6 +23,16 @@ const insights = (state = initState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case SET_INIT_INSIGHT_MESSAGE_DATA:
+            return {
+                ...state,
+                perChatRoomData: payload,
+            };
+        case SET_INIT_INSIGHT_WORD_DATA:
+            return {
+                ...state,
+                wordCountData: payload,
+            };
         case UPDATE_PER_CHAT_ROOM_DATA:
             let myIndex = state.perChatRoomData.findIndex(
                 (item) => item.chatRoomName === payload.chatRoomName
@@ -39,19 +51,10 @@ const insights = (state = initState, action) => {
             } else {
                 newData = [...state.perChatRoomData, payload];
             }
-            newData.sort((a, b) => b.count - a.count);
-
             return {
                 ...state,
                 perChatRoomData: newData,
             };
-        // return {
-        //     ...state,
-        //     perChatRoomData: {
-        //         ...state.perChatRoomData,
-        //         [payload.chatRoomName]: payload.count,
-        //     },
-        // };
         case UPDATE_WORD_COUNT_DATA:
             const index = state.wordCountData.findIndex(
                 (item) => item.word === payload.word
