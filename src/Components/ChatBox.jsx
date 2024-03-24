@@ -6,10 +6,10 @@ const ChatBox = ({ chatRooms: { activeChatRoom, messages } }) => {
     return (
         <div className="chat-page">
             {messages.map((message) => (
-                <div key={message.timestamp}>
-                    <h3>{message.username}</h3>
-                    <p>{message.message}</p>
-                    <p>{message.timestamp}</p>
+                <div className="chat-message" key={message.timestamp}>
+                    <p className="username">{message.username}</p>
+                    <p className="message">{message.message}</p>
+                    <p className="timestamp">{message.timestamp}</p>
                 </div>
             ))}
         </div>

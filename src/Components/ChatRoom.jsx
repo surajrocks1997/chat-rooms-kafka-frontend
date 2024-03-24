@@ -60,7 +60,7 @@ const ChatRoom = ({
     return (
         <div>
             <div className="room-list">
-                <h1>{activeChatRoom} - Chat Room</h1>
+                <h1>{activeChatRoom}</h1>
                 <hr />
             </div>
             {isLoading ? (

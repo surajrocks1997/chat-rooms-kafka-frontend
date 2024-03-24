@@ -1,0 +1,51 @@
+.welcome-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* margin-left: 1px; */
+    
+    /* border: 1px solid black; */
+}
+
+/* .background{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../public/iOS\ 13\ Wallpaper\ 2\ YTECHB-01.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+}
+
+.content{
+    z-index: 1;
+} */
+
+.welcome-page .title{
+    text-align: center;
+    
+    /* border: 1px solid black; */
+}
+
+.welcome-page .user input{
+    margin-left: 2px;
+}
+
+.welcome-page .user{
+    margin-left: 2px;
+    text-align: center;
+    
+    /* border: 1px solid black; */
+}
+
+.title{
+    font: 2em sans-serif ;
+    color: black;
+}

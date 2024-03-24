@@ -1,15 +1,16 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "./GraphsInsight.css";
 import { Chart as ChartJS, defaults } from "chart.js/auto";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 
-// defaults.maintainAspectRatio = false;
-// defaults.responsive = true;
+defaults.maintainAspectRatio = false;
+defaults.responsive = true;
 
 const GraphsInsight = ({ insights: { perChatRoomData, wordCountData } }) => {
     return (
         <div>
-            <h3>Messages Per Topic</h3>
+            {/* <p>Messages Per Topic</p> */}
             <div className="top">
                 <Doughnut
                     data={{
@@ -34,7 +35,7 @@ const GraphsInsight = ({ insights: { perChatRoomData, wordCountData } }) => {
                     }}
                 />
             </div>
-            <h3>Top 10 Trending Words</h3>
+            {/* <p>Top 10 Trending Words</p> */}
             <div className="bottom">
                 <Bar
                     data={{
