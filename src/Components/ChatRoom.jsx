@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import webSocketService from "../class/WebSocketService";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "./ChatBox.css";
 import {
     addMessage,
     clearActiveChatRoomState,
@@ -65,16 +66,22 @@ const ChatRoom = ({
             {isLoading ? (
                 <Spinner />
             ) : (
-                <div className="chat-box">
+                <div className="chat-box chat-container">
                     <ChatBox />
-                    <input
-                        type="text"
-                        value={chatText}
-                        onChange={(e) => setChatText(e.target.value)}
-                        placeholder="Please Type Some Message here!!"
-                        size="50"
-                    />
-                    <input type="button" value="Send" onClick={sendMessage} />
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={chatText}
+                            onChange={(e) => setChatText(e.target.value)}
+                            placeholder="Please Type Some Message here!!"
+                            size="50"
+                        />
+                        <input
+                            type="button"
+                            value="Send"
+                            onClick={sendMessage}
+                        />
+                    </div>
                 </div>
             )}
         </div>

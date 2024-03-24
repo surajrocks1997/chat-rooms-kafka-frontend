@@ -28,7 +28,7 @@ const chatRooms = (state = initState, action) => {
         case ADD_MESSAGE:
             return {
                 ...state,
-                messages: [...state.messages, payload],
+                messages: [payload, ...state.messages],
             };
         case CLEAR_CHAT_ROOM:
             return {
