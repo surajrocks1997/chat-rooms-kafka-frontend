@@ -1,0 +1,79 @@
+.room-list{
+    text-align: center;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 85vh
+}
+
+.input-container {
+    display: flex;
+    /* justify-content: space-evenly; */
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    margin-left: 10px;
+}
+
+.input-container input:first-child {
+    display: flex;
+    width: 100%;
+    margin-right: 5px;
+}
+
+.chat-page {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    
+    flex-direction: column-reverse; /* This will make new messages appear at the bottom */
+
+    width: 100%;
+    /* max-width: 600px; */
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.chat-message{
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 8px;
+    width: 75%;
+    background-color: #f9f9f9;
+}
+
+.username{
+    font-weight: bold;
+}
+    
+
+/* .chat-page div {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+} */
+
+/* .chat-page h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    font-weight: bold;
+} */
+
+.chat-page p {
+    margin: 0;
+}
+
+.chat-page p:last-child {
+    font-size: 0.8em;
+    color: #999;
+}

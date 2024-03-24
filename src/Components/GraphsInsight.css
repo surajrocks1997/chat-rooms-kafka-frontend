@@ -1,0 +1,17 @@
+.graphs-container{
+    display: flex;
+    flex-direction: column;
+
+    /* border: 1px solid black; */
+}
+
+.top{
+    flex: 1;
+    height: 50vh;
+    /* border: 1px solid black; */
+}
+.bottom{
+    flex: 2;
+    height: 50vh;
+    /* border: 1px solid black; */
+}
