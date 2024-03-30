@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import webSocketService from "../class/WebSocketService";
+import webSocketService from "../../class/WebSocketService";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import "./ChatBox.css";
@@ -7,9 +7,9 @@ import {
     addMessage,
     clearActiveChatRoomState,
     setRequiredChatState,
-} from "../Actions/chat-rooms";
+} from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
-import Spinner from "./Spinner/Spinner";
+import Spinner from "../Spinner/Spinner";
 
 const ChatRoom = ({
     userInfo: { username },

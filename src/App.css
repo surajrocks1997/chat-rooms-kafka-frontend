@@ -1,20 +1,129 @@
-.container{
-  display: flex;
+.landing {
+    position: relative;
+    background: url(../public/landing-wallpaper.jpg) no-repeat center
+        center/cover;
+    height: 100vh;
+}
+
+:root {
+    --primary-color: #2aa4b7;
+    --dark-color: #343a40;
+    --light-color: #f4f4f4;
+    --danger-color: #dc3545;
+    --success-color: #28a745;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--light-color);
+    color: #333;
+    margin-top: 2px;
+    padding: 0.4rem 1.3rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    /* transition: opacity 0.2s ease-in; */
+    outline: none;
+}
+
+.btn-primary,
+.bg-primary,
+.badge-primary,
+.alert-primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.btn-light,
+.bg-light,
+.badge-light,
+.alert-light {
+    background: var(--light-color);
+    color: #333;
+}
+
+.btn-dark,
+.bg-dark,
+.badge-dark,
+.alert-dark {
+    background: var(--dark-color);
+    color: #fff;
+}
+
+.btn-danger,
+.bg-danger,
+.badge-danger,
+.alert-danger {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+.btn-success,
+.bg-success,
+.badge-success,
+.alert-success {
+    background: var(--success-color);
+    color: #fff;
+}
+
+.btn-white,
+.bg-white,
+.badge-white,
+.alert-white {
+    background: #fff;
+    color: #333;
+    border: #ccc solid 1px;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"],
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+    width: 94%;
+    padding: 0.4rem;
+    margin: 0.2rem;
+    font-size: 1rem;
+}
+
+.login-form
+    input[type="submit"]
+    .signup-form
+    input[type="submit"]
+    .form
+    input[type="button"],
+button {
+    font: inherit;
+    width: inherit;
+}
+
+/* .form .form-group {
+  margin: 1rem 0;
+}
+
+.form .form-text {
+  display: block;
+  margin-top: 0.3rem;
+  color: #888;
+}
+
+.form input[type='text'],
+.form input[type='email'],
+.form input[type='password'],
+.form input[type='date'],
+.form select,
+.form textarea {
+  display: block;
   width: 100%;
-  /* border: 1px solid black; */
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
 }
 
-.right-container{
-  flex: 2;
-  margin-left: 10px;
-  
-  /* border: 1px solid black;
-  margin: 2px; */
-}
-
-.left-container{
-  flex: 1;
-  
-  /* border: 1px solid black;
-  margin: 2px; */
-}
+.form input[type='submit'],
+button {
+  font: inherit;
+} */

@@ -1,9 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
-import WelcomePage from "./Components/WelcomePage";
-import ChatRoom from "./Components/ChatRoom";
-import ChatShowRoom from "./Components/ChatShowRoom";
-import Insights from "./Components/Insights";
+import WelcomePage from "./Components/WelcomePage/WelcomePage";
+import ChatRoom from "./Components/ChatBox/ChatRoom";
+import ChatShowRoom from "./Components/ChatShowRoom/ChatShowRoom";
+import Insights from "./Components/GraphInsight/Insights";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout = ({ children }) => {
     return (
@@ -21,19 +23,26 @@ const App = () => {
     return (
         <div className="App">
             <Router>
-                <Layout>
-                    <Routes>
-                        <Route Component={WelcomePage} path="/"></Route>
-                        <Route
-                            Component={ChatShowRoom}
-                            path="/chatRooms"
-                        ></Route>
-                        <Route
-                            Component={ChatRoom}
-                            path="/chatRooms/:chatRoom"
-                        ></Route>
-                    </Routes>
-                </Layout>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={true}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
+                <Routes>
+                    <Route Component={WelcomePage} path="/"></Route>
+                    <Route Component={ChatShowRoom} path="/chatRooms"></Route>
+                    <Route
+                        Component={ChatRoom}
+                        path="/chatRooms/:chatRoom"
+                    ></Route>
+                </Routes>
             </Router>
         </div>
     );

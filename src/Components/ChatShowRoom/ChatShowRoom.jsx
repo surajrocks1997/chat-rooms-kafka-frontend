@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setActiveChatRoom } from "../Actions/chat-rooms";
+import { setActiveChatRoom } from "../../Actions/chat-rooms";
 import "./ChatShowRoom.css";
 
 const ChatShowRoom = ({ setActiveChatRoom }) => {
