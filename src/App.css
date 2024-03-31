@@ -82,6 +82,7 @@
 .login-form input[type="email"],
 .login-form input[type="password"],
 .signup-form input[type="email"],
+.signup-form input[type="text"],
 .signup-form input[type="password"] {
     width: 94%;
     padding: 0.4rem;

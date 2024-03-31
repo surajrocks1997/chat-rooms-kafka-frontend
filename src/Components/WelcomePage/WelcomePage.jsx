@@ -3,10 +3,11 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { setUserName } from "../../Actions/userData";
 import { useNavigate } from "react-router-dom";
+import { signUp, login } from "../../Actions/auth";
 import { toast } from "react-toastify";
 import "./WelcomePage.css";
 
-const WelcomePage = () => {
+const WelcomePage = ({ signUp, login }) => {
     const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState(1);
@@ -17,13 +18,14 @@ const WelcomePage = () => {
     });
 
     const [signupFormData, setSignupFormData] = useState({
+        fullName: "",
         signUpEmail: "",
         signUpPassword: "",
         signUpConfirmPassword: "",
     });
 
     const { loginEmail, loginPassword } = loginformData;
-    const { signUpEmail, signUpPassword, signUpConfirmPassword } =
+    const { fullName, signUpEmail, signUpPassword, signUpConfirmPassword } =
         signupFormData;
 
     const onChangeLogin = (e) => {
@@ -35,7 +37,7 @@ const WelcomePage = () => {
 
     const onSubmitLogin = async (e) => {
         e.preventDefault();
-        navigate("/chatRooms");
+        login({ loginEmail, loginPassword });
     };
 
     const onChangeSignUp = (e) => {
@@ -45,16 +47,12 @@ const WelcomePage = () => {
         });
     };
 
-    const showToastMessage = () => {
-        toast.warn("Passwords do not match!");
-    };
-
-    const onSubmitSignUp = async (e) => {
+    const onSubmitSignUp = (e) => {
         e.preventDefault();
         if (signUpPassword !== signUpConfirmPassword) {
-            showToastMessage();
+            toast.warn("Passwords do not match!");
         } else {
-            navigate("/chatRooms");
+            signUp({ fullName, signUpEmail, signUpPassword });
         }
     };
 
@@ -106,6 +104,16 @@ const WelcomePage = () => {
                                     className="signup-form"
                                     onSubmit={(e) => onSubmitSignUp(e)}
                                 >
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            placeholder="Full Name"
+                                            name="fullName"
+                                            value={fullName}
+                                            onChange={(e) => onChangeSignUp(e)}
+                                            required
+                                        />
+                                    </div>
                                     <div className="form-group">
                                         <input
                                             type="email"
@@ -166,10 +174,16 @@ const WelcomePage = () => {
 
 WelcomePage.propTypes = {
     setUserName: PropTypes.func.isRequired,
+    signUp: PropTypes.func,
+    login: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
     userInfo: state.userInfo,
 });
 
-export default connect(mapStateToProps, { setUserName })(WelcomePage);
+export default connect(mapStateToProps, {
+    setUserName,
+    signUp,
+    login,
+})(WelcomePage);
