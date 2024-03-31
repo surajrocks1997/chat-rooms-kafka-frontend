@@ -58,7 +58,7 @@ const ChatRoom = ({
     };
 
     return (
-        <div>
+        <div className="parent-chat">
             <div className="room-list">
                 <h1>{activeChatRoom}</h1>
                 <hr />

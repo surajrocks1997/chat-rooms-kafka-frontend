@@ -52,6 +52,7 @@ const App = () => {
                 <Routes>
                     <Route Component={WelcomePage} path="/"></Route>
                     <Route Component={ChatShowRoom} path="/chatRooms"></Route>
+                    <Route Component={Insights} path="/insights"></Route>
                     <Route
                         Component={ChatRoom}
                         path="/chatRooms/:chatRoom"

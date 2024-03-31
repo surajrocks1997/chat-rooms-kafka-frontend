@@ -9,9 +9,9 @@ defaults.responsive = true;
 
 const GraphsInsight = ({ insights: { perChatRoomData, wordCountData } }) => {
     return (
-        <div>
+        <div className="insight-container">
             {/* <p>Messages Per Topic</p> */}
-            <div className="top">
+            <div className="doughnut">
                 <Doughnut
                     data={{
                         labels: perChatRoomData.map(
@@ -36,7 +36,7 @@ const GraphsInsight = ({ insights: { perChatRoomData, wordCountData } }) => {
                 />
             </div>
             {/* <p>Top 10 Trending Words</p> */}
-            <div className="bottom">
+            <div className="bar">
                 <Bar
                     data={{
                         labels: wordCountData.map((data, index) => data.word),

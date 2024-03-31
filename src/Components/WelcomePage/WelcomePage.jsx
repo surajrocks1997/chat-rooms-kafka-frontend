@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setUserName } from "../../Actions/userData";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import "./WelcomePage.css";
 const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
     const navigate = useNavigate();
 
-    const [activeForm, setActiveForm] = useState(1);
+    const [activeForm, setActiveForm] = useState(0);
 
     const [loginformData, setLoginFormData] = useState({
         loginEmail: "",
@@ -56,9 +56,11 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
         }
     };
 
-    if (isAuthenticated) {
-        navigate("/chatRooms");
-    }
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/chatRooms");
+        }
+    });
 
     return (
         <section className="landing">

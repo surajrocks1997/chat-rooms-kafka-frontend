@@ -75,7 +75,7 @@ const insights = (state = initState, action) => {
             }
 
             newWords.sort((a, b) => b.count - a.count);
-            const finalData = newWords.slice(0, 10);
+            const finalData = newWords.slice(0, 20);
             return {
                 ...state,
                 wordCountData: finalData.sort((a, b) => a.count - b.count),
