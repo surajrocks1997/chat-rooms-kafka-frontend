@@ -29,7 +29,7 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
             {isAuthenticated && (
                 <>
                     <p>
-                        <Link to="/">
+                        <Link to="/chatRooms">
                             <i className=""></i>Open Chat Rooms
                         </Link>
                     </p>
