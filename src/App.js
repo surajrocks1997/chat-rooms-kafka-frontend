@@ -6,6 +6,11 @@ import ChatShowRoom from "./Components/ChatShowRoom/ChatShowRoom";
 import Insights from "./Components/GraphInsight/Insights";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import store from "./Store/store";
+import { loadUser } from "./Actions/auth";
+import setAuthToken from "./utils/axiosTokenHeader";
+import NavBar from "./Components/NavBar/NavBar";
 
 const Layout = ({ children }) => {
     return (
@@ -19,7 +24,15 @@ const Layout = ({ children }) => {
     );
 };
 
+if (localStorage.token) {
+    setAuthToken(localStorage.token);
+}
+
 const App = () => {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    });
+
     return (
         <div className="App">
             <Router>
@@ -35,6 +48,7 @@ const App = () => {
                     pauseOnHover
                     theme="dark"
                 />
+                <NavBar />
                 <Routes>
                     <Route Component={WelcomePage} path="/"></Route>
                     <Route Component={ChatShowRoom} path="/chatRooms"></Route>

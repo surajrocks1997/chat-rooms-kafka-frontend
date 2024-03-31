@@ -1,8 +1,10 @@
 import axios from "axios";
 import {
     AUTH_ERROR,
+    CLEAR_PROFILE,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
+    LOGOUT,
     REGISTER_FAIL,
     REGISTER_SUCCESS,
     USER_LOADED,
@@ -105,4 +107,10 @@ export const loadUser = () => async (dispatch) => {
             type: AUTH_ERROR,
         });
     }
+};
+
+export const logout = () => (dispatch) => {
+    dispatch({
+        type: LOGOUT,
+    });
 };

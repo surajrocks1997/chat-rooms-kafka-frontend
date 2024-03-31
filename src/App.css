@@ -101,30 +101,43 @@ button {
     width: inherit;
 }
 
-/* .form .form-group {
-  margin: 1rem 0;
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #01193f;
+    opacity: 1;
+    top: 0;
+    width: 100%;
 }
 
-.form .form-text {
-  display: block;
-  margin-top: 0.3rem;
-  color: #888;
+.navbar ul {
+    display: flex;
+    padding-right: 1.5rem;
 }
 
-.form input[type='text'],
-.form input[type='email'],
-.form input[type='password'],
-.form input[type='date'],
-.form select,
-.form textarea {
-  display: block;
-  width: 100%;
-  padding: 0.4rem;
-  font-size: 1.2rem;
-  border: 1px solid #ccc;
+ul {
+    list-style: none;
 }
 
-.form input[type='submit'],
-button {
-  font: inherit;
-} */
+.navbar a {
+    color: #fff;
+    padding: 0 1rem;
+    margin: 0 0rem;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: var(--primary-color);
+}
+
+.navbar .welcome span {
+    margin-right: 0.6rem;
+}
+
+.navbar p {
+    padding-left: 1rem;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+}

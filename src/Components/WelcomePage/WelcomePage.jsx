@@ -7,7 +7,7 @@ import { signUp, login } from "../../Actions/auth";
 import { toast } from "react-toastify";
 import "./WelcomePage.css";
 
-const WelcomePage = ({ signUp, login }) => {
+const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
     const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState(1);
@@ -55,6 +55,10 @@ const WelcomePage = ({ signUp, login }) => {
             signUp({ fullName, signUpEmail, signUpPassword });
         }
     };
+
+    if (isAuthenticated) {
+        navigate("/chatRooms");
+    }
 
     return (
         <section className="landing">
@@ -176,10 +180,12 @@ WelcomePage.propTypes = {
     setUserName: PropTypes.func.isRequired,
     signUp: PropTypes.func,
     login: PropTypes.func,
+    isAuthenticated: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
     userInfo: state.userInfo,
+    auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
