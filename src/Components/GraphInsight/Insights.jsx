@@ -7,7 +7,7 @@ import {
     updateWordCountData,
     getInitData,
 } from "../../Actions/insights";
-import { messageSse, wordCountSse } from "../../config/config";
+import { messageSse, wordCountSse } from "../../config/sseConfig";
 import GraphsInsight from "./GraphsInsight";
 
 const Insights = ({

@@ -1,7 +1,8 @@
+import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-export class WebSocketService {
+export default class WebSocketService {
     constructor() {
         this.stompClient = null;
         this.initWebSocket();
@@ -18,6 +19,7 @@ export class WebSocketService {
                 console.log(frame);
             },
             () => {
+                toast.error("Could not Connect to Server. Please try refreshing the page")
                 console.log(
                     "Could not Connect to WebSocket Server. Please Try Again"
                 );
@@ -34,5 +36,5 @@ export class WebSocketService {
     }
 }
 
-const webSocketService = new WebSocketService();
-export default webSocketService;
+// const webSocketService = new WebSocketService();
+// export default webSocketService;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import webSocketService from "../../class/WebSocketService";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import "./ChatBox.css";
@@ -10,9 +9,13 @@ import {
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
+import initWSManager from "../../config/initWSManager";
 
 const ChatRoom = ({
-    userInfo: { username },
+    auth: {
+        user: { name },
+        loading,
+    },
     addMessage,
     chatRooms: { isLoading, activeChatRoom },
     setRequiredChatState,
@@ -22,7 +25,11 @@ const ChatRoom = ({
     const [chatText, setChatText] = useState("");
 
     useEffect(() => {
-        const stompClient = webSocketService.getStompClient();
+        let wsId = initWSManager.getWSService();
+        if (wsId == null) {
+            wsId = initWSManager.createWSService();
+        }
+        const stompClient = wsId.getStompClient();
         setStompClient(stompClient);
         setRequiredChatState(activeChatRoom);
 
@@ -49,7 +56,7 @@ const ChatRoom = ({
             `/app/chatRoom/${activeChatRoom}`,
             {},
             JSON.stringify({
-                username,
+                username: name,
                 message: chatText,
                 chatRoomName: activeChatRoom,
             })
@@ -57,7 +64,9 @@ const ChatRoom = ({
         setChatText("");
     };
 
-    return (
+    return loading ? (
+        <Spinner />
+    ) : (
         <div className="parent-chat">
             <div className="room-list">
                 <h1>{activeChatRoom}</h1>
@@ -89,15 +98,15 @@ const ChatRoom = ({
 };
 
 ChatRoom.propTypes = {
-    username: PropTypes.string,
+    name: PropTypes.string,
     addMessage: PropTypes.func,
     setRequiredChatState: PropTypes.func,
     clearActiveChatRoomState: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
-    userInfo: state.userInfo,
     chatRooms: state.chatRooms,
+    auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
