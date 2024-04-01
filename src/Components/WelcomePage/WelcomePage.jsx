@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { setUserName } from "../../Actions/userData";
 import { useNavigate } from "react-router-dom";
 import { signUp, login } from "../../Actions/auth";
 import { toast } from "react-toastify";
@@ -179,19 +178,16 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
 };
 
 WelcomePage.propTypes = {
-    setUserName: PropTypes.func.isRequired,
     signUp: PropTypes.func,
     login: PropTypes.func,
     isAuthenticated: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-    userInfo: state.userInfo,
     auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
-    setUserName,
     signUp,
     login,
 })(WelcomePage);

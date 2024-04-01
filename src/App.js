@@ -11,6 +11,7 @@ import store from "./Store/store";
 import { loadUser } from "./Actions/auth";
 import setAuthToken from "./utils/axiosTokenHeader";
 import NavBar from "./Components/NavBar/NavBar";
+import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 
 const Layout = ({ children }) => {
     return (
@@ -50,13 +51,15 @@ const App = () => {
                 />
                 <NavBar />
                 <Routes>
-                    <Route Component={WelcomePage} path="/"></Route>
-                    <Route Component={ChatShowRoom} path="/chatRooms"></Route>
-                    <Route Component={Insights} path="/insights"></Route>
-                    <Route
-                        Component={ChatRoom}
-                        path="/chatRooms/:chatRoom"
-                    ></Route>
+                    <Route element={<WelcomePage />} path="/" />
+                    <Route element={<PrivateRoute />} path="/">
+                        <Route path="/chatRooms" element={<ChatShowRoom />} />
+                        <Route
+                            path="/chatRooms/:chatRoom"
+                            element={<ChatRoom />}
+                        />
+                    </Route>
+                    <Route element={<Insights />} path="/insights" />
                 </Routes>
             </Router>
         </div>
