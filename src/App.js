@@ -13,18 +13,6 @@ import setAuthToken from "./utils/axiosTokenHeader";
 import NavBar from "./Components/NavBar/NavBar";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 
-const Layout = ({ children }) => {
-    return (
-        <div className="container">
-            <div className="insights left-container">
-                <Insights />
-            </div>
-
-            <div className="right-container">{children}</div>
-        </div>
-    );
-};
-
 if (localStorage.token) {
     setAuthToken(localStorage.token);
 }

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signUp, login } from "../../Actions/auth";
-import { toast } from "react-toastify";
 import "./WelcomePage.css";
+import { generateToastifyError } from "../../Actions/toastify";
 
 const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
     const onSubmitSignUp = (e) => {
         e.preventDefault();
         if (signUpPassword !== signUpConfirmPassword) {
-            toast.warn("Passwords do not match!");
+            generateToastifyError("Passwords do not match!")
         } else {
             signUp({ fullName, signUpEmail, signUpPassword });
         }
