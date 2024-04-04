@@ -1,14 +1,31 @@
 import {
     ADD_MESSAGE,
+    ADD_TO_ONLINE_LIST,
     CLEAR_CHAT_ROOM,
     LOADING_CHAT_ROOM,
+    REMOVE_FROM_ONLINE_LIST,
     SET_ACTIVE_CHAT_ROOM,
 } from "./types";
 
 export const addMessage = (message) => (dispatch) => {
+    const { messageType, chatRoomName, ...rest } = message;
     dispatch({
         type: ADD_MESSAGE,
-        payload: message,
+        payload: rest,
+    });
+};
+
+export const addUserToOnline = (email) => (dispatch) => {
+    dispatch({
+        type: ADD_TO_ONLINE_LIST,
+        payload: email,
+    });
+};
+
+export const removeUserFromOnline = (email) => (dispatch) => {
+    dispatch({
+        type: REMOVE_FROM_ONLINE_LIST,
+        payload: email,
     });
 };
 
