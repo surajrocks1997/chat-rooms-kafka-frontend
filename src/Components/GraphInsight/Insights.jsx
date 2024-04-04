@@ -6,8 +6,8 @@ import {
     updatePerChatRoomData,
     updateWordCountData,
     getInitData,
-} from "../Actions/insights";
-import { messageSse, wordCountSse } from "../config/config";
+} from "../../Actions/insights";
+import { messageSse, wordCountSse } from "../../config/sseConfig";
 import GraphsInsight from "./GraphsInsight";
 
 const Insights = ({

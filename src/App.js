@@ -1,39 +1,54 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
-import WelcomePage from "./Components/WelcomePage";
-import ChatRoom from "./Components/ChatRoom";
-import ChatShowRoom from "./Components/ChatShowRoom";
-import Insights from "./Components/Insights";
+import WelcomePage from "./Components/WelcomePage/WelcomePage";
+import ChatRoom from "./Components/ChatBox/ChatRoom";
+import ChatShowRoom from "./Components/ChatShowRoom/ChatShowRoom";
+import Insights from "./Components/GraphInsight/Insights";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import store from "./Store/store";
+import { loadUser } from "./Actions/auth";
+import setAuthToken from "./utils/axiosTokenHeader";
+import NavBar from "./Components/NavBar/NavBar";
+import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 
-const Layout = ({ children }) => {
-    return (
-        <div className="container">
-            <div className="insights left-container">
-                <Insights />
-            </div>
-
-            <div className="right-container">{children}</div>
-        </div>
-    );
-};
+if (localStorage.token) {
+    setAuthToken(localStorage.token);
+}
 
 const App = () => {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    });
+
     return (
         <div className="App">
             <Router>
-                <Layout>
-                    <Routes>
-                        <Route Component={WelcomePage} path="/"></Route>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={true}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
+                <NavBar />
+                <Routes>
+                    <Route element={<WelcomePage />} path="/" />
+                    <Route element={<PrivateRoute />} path="/">
+                        <Route path="/chatRooms" element={<ChatShowRoom />} />
                         <Route
-                            Component={ChatShowRoom}
-                            path="/chatRooms"
-                        ></Route>
-                        <Route
-                            Component={ChatRoom}
                             path="/chatRooms/:chatRoom"
-                        ></Route>
-                    </Routes>
-                </Layout>
+                            element={<ChatRoom />}
+                        />
+                    </Route>
+                    <Route element={<Insights />} path="/insights" />
+                </Routes>
             </Router>
         </div>
     );

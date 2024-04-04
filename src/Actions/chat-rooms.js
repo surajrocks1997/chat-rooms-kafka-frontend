@@ -34,7 +34,7 @@ export const setRequiredChatState = (roomName) => (dispatch) => {
                 type: LOADING_CHAT_ROOM,
                 payload: false,
             }),
-        2000
+        0
     );
 };
 
