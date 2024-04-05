@@ -15,17 +15,17 @@ export const addMessage = (message) => (dispatch) => {
     });
 };
 
-export const addUserToOnline = (email) => (dispatch) => {
+export const addUserToOnline = (arrOfEmails) => (dispatch) => {
     dispatch({
         type: ADD_TO_ONLINE_LIST,
-        payload: email,
+        payload: arrOfEmails,
     });
 };
 
-export const removeUserFromOnline = (email) => (dispatch) => {
+export const removeUserFromOnline = (arrOfEmails) => (dispatch) => {
     dispatch({
         type: REMOVE_FROM_ONLINE_LIST,
-        payload: email,
+        payload: arrOfEmails,
     });
 };
 

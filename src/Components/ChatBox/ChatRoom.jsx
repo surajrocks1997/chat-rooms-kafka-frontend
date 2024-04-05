@@ -44,9 +44,9 @@ const ChatRoom = ({
             if (message.messageType === CHAT_MESSAGE) {
                 addMessage(message);
             } else if (message.messageType === USER_ONLINE) {
-                addUserToOnline(message.username);
+                addUserToOnline(message.additionalData);
             } else if (message.messageType === USER_OFFLINE) {
-                removeUserFromOnline(message.username);
+                removeUserFromOnline(message.additionalData);
             } else {
                 console.warn(message);
             }
