@@ -57,5 +57,3 @@ const chatRooms = (state = initState, action) => {
 };
 
 export default chatRooms;
-
-// {"username":"SURAJ","message":"asdasd","timestamp":"1709712378206","chatRoomName":"chat-room-1"}

@@ -9,6 +9,17 @@ import {
 
 export const addMessage = (message) => (dispatch) => {
     const { messageType, chatRoomName, ...rest } = message;
+    const datetime = new Date(parseInt(rest.timestamp));
+    let options = {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    };
+    let formattedDateTime = new Intl.DateTimeFormat("en-US", options).format(
+        datetime
+    );
+    rest.timestamp = formattedDateTime;
+
     dispatch({
         type: ADD_MESSAGE,
         payload: rest,

@@ -13,6 +13,7 @@ import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
 import initWSManager from "../../config/initWSManager";
 import { CHAT_MESSAGE, USER_OFFLINE, USER_ONLINE } from "../../Actions/types";
+import OnlineGreeDot from "../OnlineGreenDot/OnlineGreenDot";
 
 const ChatRoom = ({
     auth: {
@@ -22,7 +23,7 @@ const ChatRoom = ({
     addMessage,
     addUserToOnline,
     removeUserFromOnline,
-    chatRooms: { isLoading, activeChatRoom },
+    chatRooms: { isLoading, activeChatRoom, online },
     setRequiredChatState,
     clearActiveChatRoomState,
 }) => {
@@ -102,13 +103,22 @@ const ChatRoom = ({
     ) : (
         <div className="parent-chat">
             <div className="room-list">
-                <h1>{activeChatRoom}</h1>
-                <hr />
+                <p>Online</p>
+                {online.map((user, index) => (
+                    <div className="online-presence">
+                        <OnlineGreeDot />
+                        <p key={index}>{user}</p>
+                    </div>
+                ))}
             </div>
-            {isLoading ? (
+            {loading && isLoading ? (
                 <Spinner />
             ) : (
                 <div className="chat-box chat-container">
+                    <div className="chat-container-header">
+                        <p>{activeChatRoom}</p>
+                    </div>
+
                     <ChatBox />
                     <div className="input-container">
                         <input
@@ -118,7 +128,7 @@ const ChatRoom = ({
                             placeholder="Please Type Some Message here!!"
                             size="50"
                         />
-                        <input
+                        <input className="btn-primary"
                             type="button"
                             value="Send"
                             onClick={sendMessage}
