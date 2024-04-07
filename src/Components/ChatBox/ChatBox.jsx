@@ -9,8 +9,9 @@ const ChatBox = ({
 }) => {
     return (
         <div className="chat-page">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
                 <div
+                    key={index}
                     className="text-appearance"
                     style={{
                         display: "flex",

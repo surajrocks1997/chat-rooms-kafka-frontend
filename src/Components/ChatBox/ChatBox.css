@@ -3,6 +3,18 @@
     justify-content: space-around;
 }
 
+.left-container{
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+}
+
+.room-insight{
+    display: flex;
+    color: white;
+    justify-content: space-evenly;
+}
+
 .room-list {
     display: flex;
     flex-direction: column;
@@ -128,13 +140,15 @@
     align-items: end;
     /* flex: 1; */
     justify-content: end;
+    font-size: 0.7rem;
+    padding-left: 10px;
 }
 
 .chat-page p {
     margin: 0;
 }
 
-.chat-page p:last-child {
+/* .chat-page p:last-child {
     font-size: 0.95rem;
     color: #000000;
-}
+} */

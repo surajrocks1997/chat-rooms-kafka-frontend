@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { useNavigate, useParams } from "react-router-dom";
 import "./ChatBox.css";
 import {
     addMessage,
@@ -16,19 +17,18 @@ import { CHAT_MESSAGE, USER_OFFLINE, USER_ONLINE } from "../../Actions/types";
 import OnlineGreeDot from "../OnlineGreenDot/OnlineGreenDot";
 
 const ChatRoom = ({
-    auth: {
-        user: { id, name, email },
-        loading,
-    },
+    auth: { user, loading },
+    insights: { perChatRoomData },
     addMessage,
     addUserToOnline,
     removeUserFromOnline,
-    chatRooms: { isLoading, activeChatRoom, online },
-    setRequiredChatState,
+    chatRooms: { isLoading, online },
     clearActiveChatRoomState,
 }) => {
     const [stompClient, setStompClient] = useState(null);
     const [chatText, setChatText] = useState("");
+    const { chatRoom } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         let wsId = initWSManager.getWSService();
@@ -36,8 +36,10 @@ const ChatRoom = ({
             wsId = initWSManager.createWSService();
         }
         const stompClient = wsId.getStompClient();
-        setStompClient(stompClient);
-        setRequiredChatState(activeChatRoom);
+
+        if (chatRoom === null || user === null || !stompClient) {
+            navigate("/chatRooms");
+        }
 
         const onMessageRecieved = (payload) => {
             console.log("FROM ON MESSAGE RECIEVED");
@@ -53,45 +55,53 @@ const ChatRoom = ({
             }
         };
 
-        stompClient.subscribe(
-            `/topic/chatRoom.${activeChatRoom}`,
-            onMessageRecieved,
-            { id: activeChatRoom }
-        );
+        if (stompClient && stompClient.connected) {
+            setStompClient(stompClient);
+            stompClient.subscribe(
+                `/topic/chatRoom.${chatRoom}`,
+                onMessageRecieved,
+                { id: chatRoom }
+            );
 
-        stompClient.send(
-            `/app/chatRoom/${activeChatRoom}`,
-            {},
-            JSON.stringify({
-                messageType: USER_ONLINE,
-                username: email,
-                chatRoomName: activeChatRoom,
-            })
-        );
-
-        return () => {
             stompClient.send(
-                `/app/chatRoom/${activeChatRoom}`,
+                `/app/chatRoom/${chatRoom}`,
                 {},
                 JSON.stringify({
-                    messageType: USER_OFFLINE,
-                    username: email,
-                    chatRoomName: activeChatRoom,
+                    messageType: USER_ONLINE,
+                    username: user.email,
+                    chatRoomName: chatRoom,
                 })
             );
-            stompClient.unsubscribe(activeChatRoom);
+        } else {
+            console.log("Websocket Connection hasn't been established yet");
+        }
+
+        return () => {
+            if (stompClient && stompClient.connected) {
+                stompClient.send(
+                    `/app/chatRoom/${chatRoom}`,
+                    {},
+                    JSON.stringify({
+                        messageType: USER_OFFLINE,
+                        username: user.email,
+                        chatRoomName: chatRoom,
+                    })
+                );
+                stompClient.unsubscribe(chatRoom);
+            }
+
             clearActiveChatRoomState();
         };
-    }, []);
+    }, [stompClient]);
 
     const sendMessage = () => {
         stompClient.send(
-            `/app/chatRoom/${activeChatRoom}`,
+            `/app/chatRoom/${chatRoom}`,
             {},
             JSON.stringify({
                 messageType: CHAT_MESSAGE,
-                username: email,
-                chatRoomName: activeChatRoom,
+                username: user.email,
+                chatRoomName: chatRoom,
                 message: chatText,
             })
         );
@@ -102,21 +112,37 @@ const ChatRoom = ({
         <Spinner />
     ) : (
         <div className="parent-chat">
-            <div className="room-list">
-                <p>Online</p>
-                {online.map((user, index) => (
-                    <div className="online-presence">
-                        <OnlineGreeDot />
-                        <p key={index}>{user}</p>
-                    </div>
-                ))}
+            <div className="left-container">
+                <div className="room-list">
+                    <p>Online</p>
+                    {online.map((user, index) => (
+                        <div className="online-presence" key={index}>
+                            <OnlineGreeDot />
+                            <p>{user}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="room-insight">
+                    <p>Total Online: {online.length}</p>
+                    <p>
+                        Total Messages:{" "}
+                        {perChatRoomData.find(
+                            (room) => room.chatRoomName === chatRoom
+                        )
+                            ? perChatRoomData.find(
+                                  (room) => room.chatRoomName === chatRoom
+                              ).count
+                            : 0}
+                    </p>
+                </div>
             </div>
+
             {loading && isLoading ? (
                 <Spinner />
             ) : (
                 <div className="chat-box chat-container">
                     <div className="chat-container-header">
-                        <p>{activeChatRoom}</p>
+                        <p>{chatRoom}</p>
                     </div>
 
                     <ChatBox />
@@ -128,7 +154,8 @@ const ChatRoom = ({
                             placeholder="Please Type Some Message here!!"
                             size="50"
                         />
-                        <input className="btn-primary"
+                        <input
+                            className="btn-primary"
                             type="button"
                             value="Send"
                             onClick={sendMessage}
@@ -147,16 +174,18 @@ ChatRoom.propTypes = {
     clearActiveChatRoomState: PropTypes.func,
     addUserToOnline: PropTypes.func.isRequired,
     removeUserFromOnline: PropTypes.func.isRequired,
+    perChatRoomData: PropTypes.array,
+    user: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
     chatRooms: state.chatRooms,
     auth: state.auth,
+    insights: state.insights,
 });
 
 export default connect(mapStateToProps, {
     addMessage,
-    setRequiredChatState,
     clearActiveChatRoomState,
     addUserToOnline,
     removeUserFromOnline,
