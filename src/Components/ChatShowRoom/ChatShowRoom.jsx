@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setActiveChatRoom } from "../../Actions/chat-rooms";
 import "./ChatShowRoom.css";
 import { useEffect } from "react";
-import initWSManager from "../../config/initWSManager";
+import InitConnectionManager from "../../config/InitConnectionManager";
 import { fetchSSEData } from "../../Actions/insights";
 
 const ChatShowRoom = ({ setActiveChatRoom, fetchSSEData }) => {
@@ -20,12 +20,19 @@ const ChatShowRoom = ({ setActiveChatRoom, fetchSSEData }) => {
     ];
 
     useEffect(() => {
-        let stompClient = initWSManager.getWSService();
+        let stompClient = InitConnectionManager.getWSService();
         if (stompClient == null) {
-            initWSManager.createWSService();
+            InitConnectionManager.createWSService();
         }
 
-        fetchSSEData();
+        let sseClient = InitConnectionManager.getSSEService();
+        if (sseClient == null) {
+            InitConnectionManager.createSSEService();
+            const sseData = InitConnectionManager.getSSEData();
+            fetchSSEData(sseData);
+        }
+
+        
     });
     return (
         <div className="chat-show-room">

@@ -12,7 +12,7 @@ import {
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
-import initWSManager from "../../config/initWSManager";
+import InitConnectionManager from "../../config/InitConnectionManager";
 import { CHAT_MESSAGE, USER_OFFLINE, USER_ONLINE } from "../../Actions/types";
 import OnlineGreeDot from "../OnlineGreenDot/OnlineGreenDot";
 
@@ -31,9 +31,9 @@ const ChatRoom = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        let wsId = initWSManager.getWSService();
+        let wsId = InitConnectionManager.getWSService();
         if (wsId == null) {
-            wsId = initWSManager.createWSService();
+            wsId = InitConnectionManager.createWSService();
         }
         const stompClient = wsId.getStompClient();
 

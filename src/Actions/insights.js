@@ -8,7 +8,7 @@ import {
     UPDATE_WORD_COUNT_DATA,
     WORD_COUNT_AGG_DATA,
 } from "./types";
-import SSEService from "../config/SSEService";
+import { InitConnectionManager } from "../config/InitConnectionManager";
 
 export const updatePerChatRoomData = (data) => (dispatch) => {
     dispatch({
@@ -46,10 +46,7 @@ export const getInitData = () => async (dispatch) => {
     });
 };
 
-export const fetchSSEData = () => (dispatch) => {
-    const sseConnection = new SSEService();
-    const sseData = sseConnection.getSSEData();
-
+export const fetchSSEData = (sseData) => (dispatch) => {
     sseData.addEventListener(CHAT_ROOM_AGG_DATA, (e) => {
         var jsonData = JSON.parse(e.data);
         console.log(jsonData);
