@@ -8,7 +8,10 @@ body {
     font-family: "Open Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    height: 100%;
+    height: 100vh;
+    position: relative;
+    background: url(../public/landing-wallpaper.jpg) no-repeat center
+        center/cover;
 }
 
 code {

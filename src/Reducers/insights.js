@@ -31,7 +31,7 @@ const insights = (state = initState, action) => {
         case SET_INIT_INSIGHT_WORD_DATA:
             return {
                 ...state,
-                wordCountData: payload,
+                wordCountData: payload.sort((a, b) => a.count - b.count),
             };
         case UPDATE_PER_CHAT_ROOM_DATA:
             let myIndex = state.perChatRoomData.findIndex(

@@ -1,11 +1,13 @@
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setActiveChatRoom } from "../../Actions/chat-rooms";
 import "./ChatShowRoom.css";
 import { useEffect } from "react";
-import initWSManager from "../../config/initWSManager";
+import InitConnectionManager from "../../config/InitConnectionManager";
+import { fetchSSEData } from "../../Actions/insights";
 
-const ChatShowRoom = ({ setActiveChatRoom }) => {
+const ChatShowRoom = ({ setActiveChatRoom, fetchSSEData }) => {
     const navigate = useNavigate();
     const chatRoomTopics = [
         "Sports",
@@ -18,11 +20,20 @@ const ChatShowRoom = ({ setActiveChatRoom }) => {
     ];
 
     useEffect(() => {
-        let stompClient = initWSManager.getWSService();
+        let stompClient = InitConnectionManager.getWSService();
         if (stompClient == null) {
-            initWSManager.createWSService();
+            InitConnectionManager.createWSService();
         }
-    })
+
+        let sseClient = InitConnectionManager.getSSEService();
+        if (sseClient == null) {
+            InitConnectionManager.createSSEService();
+            const sseData = InitConnectionManager.getSSEData();
+            fetchSSEData(sseData);
+        }
+
+        
+    });
     return (
         <div className="chat-show-room">
             <p>Select a Chat Room Topic you wish to chat on.</p>
@@ -46,8 +57,15 @@ const ChatShowRoom = ({ setActiveChatRoom }) => {
     );
 };
 
+ChatShowRoom.propTypes = {
+    setActiveChatRoom: PropTypes.func,
+    fetchSSEData: PropTypes.func,
+};
+
 const mapStateToProps = (state) => ({
     userInfo: state.userInfo,
 });
 
-export default connect(mapStateToProps, { setActiveChatRoom })(ChatShowRoom);
+export default connect(mapStateToProps, { setActiveChatRoom, fetchSSEData })(
+    ChatShowRoom
+);
