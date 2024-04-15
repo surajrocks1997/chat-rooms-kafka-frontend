@@ -50,8 +50,16 @@ const ChatRoom = ({
                 addUserToOnline(message.additionalData);
             } else if (message.messageType === USER_OFFLINE) {
                 removeUserFromOnline(message.additionalData);
-            } else {
-                console.warn(message);
+            } 
+            else {
+                /////////////////////////////////////////////////////////
+                if (message.messageType === "PRIVATE_MESSAGE") {
+                    console.log("From PRIVATE MESSAGE");
+                } 
+                /////////////////////////////////////////////////////////
+                else {
+                    console.warn(message);
+                }
             }
         };
 
@@ -62,6 +70,13 @@ const ChatRoom = ({
                 onMessageRecieved,
                 { id: chatRoom }
             );
+            /////////////////////////////////////////////////////////
+            stompClient.subscribe(
+                `/user/${user.email}/queue/messages`,
+                onMessageRecieved,
+                {}
+            );
+            /////////////////////////////////////////////////////////
 
             stompClient.send(
                 `/app/chatRoom/${chatRoom}`,
@@ -92,9 +107,10 @@ const ChatRoom = ({
 
             clearActiveChatRoomState();
         };
-    }, [stompClient]);
+    }, []);
 
     const sendMessage = () => {
+        if (chatText === "") return;
         stompClient.send(
             `/app/chatRoom/${chatRoom}`,
             {},
@@ -105,6 +121,20 @@ const ChatRoom = ({
                 message: chatText,
             })
         );
+
+        /////////////////////////////////////////////////////////
+        stompClient.send(
+            `/app/privateMessage/jdoe@email.com`,
+            {},
+            JSON.stringify({
+                messageType: "PRIVATE_MESSAGE",
+                username: user.email,
+                receiver: "jdoe@email.com",
+                message: chatText,
+            })
+        );
+        /////////////////////////////////////////////////////////
+
         setChatText("");
     };
 

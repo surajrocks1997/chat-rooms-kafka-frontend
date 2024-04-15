@@ -32,8 +32,8 @@ export const getInitData = () => async (dispatch) => {
         "http://localhost:8081/init/fetchWordData"
     );
 
-    console.log(initMessageData);
-    console.log(initWordCountData);
+    // console.log(initMessageData);
+    // console.log(initWordCountData);
 
     dispatch({
         type: SET_INIT_INSIGHT_MESSAGE_DATA,
@@ -49,18 +49,18 @@ export const getInitData = () => async (dispatch) => {
 export const fetchSSEData = (sseData) => (dispatch) => {
     sseData.addEventListener(CHAT_ROOM_AGG_DATA, (e) => {
         var jsonData = JSON.parse(e.data);
-        console.log(jsonData);
+        // console.log(jsonData);
         dispatch(updatePerChatRoomData(jsonData));
     });
 
     sseData.addEventListener(WORD_COUNT_AGG_DATA, (e) => {
         var jsonData = JSON.parse(e.data);
-        console.log(jsonData);
+        // console.log(jsonData);
         dispatch(updateWordCountData(jsonData));
     });
 
     sseData.onopen = (e) => {
-        console.log(e);
+        // console.log(e);
     };
 
     sseData.onerror = (e) => {

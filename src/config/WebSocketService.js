@@ -9,17 +9,20 @@ export default class WebSocketService {
     }
 
     initWebSocket() {
+        const jwt = localStorage.token;
         console.log("From WebSocketService Class");
-        const socket = new SockJS("http://localhost:8080/chat-rooms");
+        const socket = new SockJS(`http://localhost:8080/chat-rooms?token=${jwt}`);
         this.stompClient = Stomp.over(socket);
         this.stompClient.connect(
             {},
             (frame) => {
                 console.log("Connected to WebSocket Server");
-                console.log(frame);
+                // console.log(frame);
             },
             () => {
-                toast.error("Could not Connect to Server. Please try refreshing the page")
+                toast.error(
+                    "Could not Connect to Server. Please try refreshing the page"
+                );
                 console.log(
                     "Could not Connect to WebSocket Server. Please Try Again"
                 );
