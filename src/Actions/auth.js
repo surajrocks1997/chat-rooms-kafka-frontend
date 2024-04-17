@@ -10,8 +10,10 @@ import {
     USER_LOADED,
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
+import { toast } from "react-toastify";
 
 const AUTH_SERVER_URL = "http://localhost:5000/api";
+const SPRING_SERVER_URL = "http://localhost:8080/api";
 
 export const signUp =
     ({ fullName, signUpEmail, signUpPassword }) =>
@@ -40,11 +42,25 @@ export const signUp =
                 payload: res.data,
             });
 
-            dispatch(loadUser());
+            const loadUserRes = await dispatch(loadUser());
+            console.log(loadUserRes);
+
+            axios.post(
+                `${SPRING_SERVER_URL}/initUserSocialDetails`,
+                {
+                    userId: loadUserRes.data.id,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
-                errors.forEach((error) => console.log(error.msg));
+                errors.forEach((error) => {
+                    console.log(error.msg);
+                    toast.error(error.msg);
+                });
             }
 
             dispatch({
@@ -82,7 +98,10 @@ export const login =
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
-                errors.forEach((error) => console.log(error.msg));
+                errors.forEach((error) => {
+                    console.log(error.msg);
+                    toast.error(error.msg);
+                });
             }
 
             dispatch({
@@ -102,6 +121,7 @@ export const loadUser = () => async (dispatch) => {
             type: USER_LOADED,
             payload: res.data,
         });
+        return res;
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,
