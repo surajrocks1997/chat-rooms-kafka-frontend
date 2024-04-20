@@ -11,9 +11,7 @@ import {
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
 import { toast } from "react-toastify";
-
-const AUTH_SERVER_URL = "http://localhost:5000/api";
-const SPRING_SERVER_URL = "http://localhost:8080/api";
+import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
 
 export const signUp =
     ({ fullName, signUpEmail, signUpPassword }) =>

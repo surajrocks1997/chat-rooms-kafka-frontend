@@ -84,6 +84,7 @@ const ChatRoom = ({
                 JSON.stringify({
                     messageType: USER_ONLINE,
                     username: user.email,
+                    userId: user.id,
                     chatRoomName: chatRoom,
                 })
             );
@@ -99,6 +100,7 @@ const ChatRoom = ({
                     JSON.stringify({
                         messageType: USER_OFFLINE,
                         username: user.email,
+                        userId: user.id,
                         chatRoomName: chatRoom,
                     })
                 );
@@ -117,6 +119,7 @@ const ChatRoom = ({
             JSON.stringify({
                 messageType: CHAT_MESSAGE,
                 username: user.email,
+                userId: user.id,
                 chatRoomName: chatRoom,
                 message: chatText,
             })
@@ -129,6 +132,7 @@ const ChatRoom = ({
             JSON.stringify({
                 messageType: "PRIVATE_MESSAGE",
                 username: user.email,
+                userId: user.id,
                 receiver: "jdoe@email.com",
                 message: chatText,
             })

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
 
-const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
+const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     const authLinks = (
         <ul>
             <li>
@@ -13,7 +13,7 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
                 <Link to="/insights">Insights</Link>
             </li>
             <li>
-                <Link to="/chatRooms">Profile</Link>
+                <Link to={`/profile/me`}>Profile</Link>
             </li>
             <li>
                 <Link to="/" onClick={logout}>
@@ -44,6 +44,7 @@ NavBar.propTypes = {
     isAuthenticated: PropTypes.bool,
     loading: PropTypes.bool,
     logout: PropTypes.func,
+    user: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({

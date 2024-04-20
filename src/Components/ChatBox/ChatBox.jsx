@@ -1,12 +1,19 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const ChatBox = ({
-    chatRooms: { activeChatRoom, messages },
+    chatRooms: { messages },
     auth: {
         user: { email },
     },
 }) => {
+    const navigate = useNavigate();
+
+    const openProfile = (id) => {
+        navigate(`/profile/${id}`);
+    };
+
     return (
         <div className="chat-page">
             {messages.map((message, index) => (
@@ -42,7 +49,12 @@ const ChatBox = ({
                         }}
                     >
                         <div className="chat-message-header">
-                            <p className="username">{message.username}</p>
+                            <p
+                                className="username"
+                                onClick={() => openProfile(message.userId)}
+                            >
+                                {message.username}
+                            </p>
                             <p className="message">{message.message}</p>
                         </div>
                         <p className="timestamp">{message.timestamp}</p>

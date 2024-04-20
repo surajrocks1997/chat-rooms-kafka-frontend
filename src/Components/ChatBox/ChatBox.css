@@ -130,6 +130,12 @@
     /* flex: 13; */
 }
 
+.chat-message-header p:first-child:hover {
+    text-decoration: underline;
+    color: var(--dark-color);
+    cursor: pointer
+}
+
 .username {
     flex: 2;
     font-weight: bold;
