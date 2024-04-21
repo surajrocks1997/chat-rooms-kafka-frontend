@@ -1,8 +1,11 @@
-import { POPULATE_VISITED_PROFILE } from "../Actions/types";
+import { INIT_SOCIAL_INFO, POPULATE_VISITED_PROFILE } from "../Actions/types";
 
 const initialState = {
     visitedProfile: null,
     isLoading: true,
+    friends: [],
+    frPending: [],
+    frSent: [],
 };
 
 const socialInfo = (state = initialState, action) => {
@@ -14,6 +17,13 @@ const socialInfo = (state = initialState, action) => {
                 ...state,
                 visitedProfile: payload,
                 isLoading: false,
+            };
+        case INIT_SOCIAL_INFO:
+            return {
+                ...state,
+                friends: payload.friendIds,
+                frPending: payload.friendRequestDetails.received.pending,
+                frSent: payload.friendRequestDetails.sent,
             };
         default:
             return state;

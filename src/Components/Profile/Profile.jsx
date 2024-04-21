@@ -17,10 +17,12 @@ const Profile = ({
     useEffect(() => {
         if (profileId !== "me") {
             fetchUserData(profileId);
-        } else fetchUserData(user.id);
-    }, [fetchUserData]);
+        } else if (user !== null) {
+            fetchUserData(user.id);
+        }
+    }, [isLoading, user]);
 
-    return isLoading ? (
+    return (isLoading || user === null) ? (
         <Spinner />
     ) : (
         <div className="profile-page">

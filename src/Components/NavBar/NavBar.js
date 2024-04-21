@@ -7,17 +7,27 @@ const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     const authLinks = (
         <ul>
             <li>
-                <Link to="/chatRooms">Chat Rooms</Link>
+                <Link to="/#">
+                    <i className="fa-regular fa-message"></i>{" "}
+                </Link>
+            </li>
+            <li>
+                <Link to="/#">
+                    <i className="fa-regular fa-user"></i>{" "}
+                </Link>
             </li>
             <li>
                 <Link to="/insights">Insights</Link>
             </li>
             <li>
-                <Link to={`/profile/me`}>Profile</Link>
+                <Link to={`/profile/me`}>
+                    <i className="fa-solid fa-id-badge"></i>{" "} 
+                    <span>Profile</span>
+                </Link>
             </li>
             <li>
                 <Link to="/" onClick={logout}>
-                    <i className="fas fa-sign-out-alt"></i>{" "}
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
                     <span className="hide-sm"> Logout</span>
                 </Link>
             </li>

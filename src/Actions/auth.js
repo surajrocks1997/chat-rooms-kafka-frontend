@@ -2,6 +2,7 @@ import axios from "axios";
 import {
     AUTH_ERROR,
     CLEAR_PROFILE,
+    INIT_SOCIAL_INFO,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
@@ -43,7 +44,7 @@ export const signUp =
             const loadUserRes = await dispatch(loadUser());
             console.log(loadUserRes);
 
-            axios.post(
+            const userSocialDetailRes = await axios.post(
                 `${SPRING_SERVER_URL}/initUserSocialDetails`,
                 {
                     userId: loadUserRes.data.id,
@@ -52,6 +53,11 @@ export const signUp =
                     withCredentials: true,
                 }
             );
+
+            dispatch({
+                type: INIT_SOCIAL_INFO,
+                payload: userSocialDetailRes.data,
+            });
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
@@ -92,7 +98,19 @@ export const login =
                 payload: res.data,
             });
 
-            dispatch(loadUser());
+            const loadUserRes = await dispatch(loadUser());
+
+            const userSocialDetailRes = await axios.get(
+                `${SPRING_SERVER_URL}/getUserSocialDetails/${loadUserRes.data.id}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            dispatch({
+                type: INIT_SOCIAL_INFO,
+                payload: userSocialDetailRes.data,
+            });
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
