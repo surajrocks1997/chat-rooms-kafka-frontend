@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,6 +28,7 @@ const ChatRoom = ({
     const [stompClient, setStompClient] = useState(null);
     const [chatText, setChatText] = useState("");
     const { chatRoom } = useParams();
+    const inputRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,12 +51,11 @@ const ChatRoom = ({
                 addUserToOnline(message.additionalData);
             } else if (message.messageType === USER_OFFLINE) {
                 removeUserFromOnline(message.additionalData);
-            } 
-            else {
+            } else {
                 /////////////////////////////////////////////////////////
                 if (message.messageType === "PRIVATE_MESSAGE") {
                     console.log("From PRIVATE MESSAGE");
-                } 
+                }
                 /////////////////////////////////////////////////////////
                 else {
                     console.warn(message);
@@ -91,6 +91,8 @@ const ChatRoom = ({
         } else {
             console.log("Websocket Connection hasn't been established yet");
         }
+
+        inputRef.current.focus();
 
         return () => {
             if (stompClient && stompClient.connected) {
@@ -142,6 +144,14 @@ const ChatRoom = ({
         setChatText("");
     };
 
+    const handleKeyUp = (e) => {
+        // handle enter key. key code for enter press is 13
+        if (e.keyCode === 13) {
+            document.getElementById("send-button").click();
+            inputRef.current.focus();
+        }
+    };
+
     return loading ? (
         <Spinner />
     ) : (
@@ -183,6 +193,9 @@ const ChatRoom = ({
                     <div className="input-container">
                         <input
                             type="text"
+                            ref={inputRef}
+                            onKeyUp={handleKeyUp}
+                            id="text-message"
                             value={chatText}
                             onChange={(e) => setChatText(e.target.value)}
                             placeholder="Please Type Some Message here!!"
@@ -190,6 +203,7 @@ const ChatRoom = ({
                         />
                         <input
                             className="btn-primary"
+                            id="send-button"
                             type="button"
                             value="Send"
                             onClick={sendMessage}
