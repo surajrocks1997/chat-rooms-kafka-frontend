@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
+import "./NavBar.css"
 
 const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     const authLinks = (
@@ -9,11 +10,13 @@ const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             <li>
                 <Link to="/#">
                     <i className="fa-regular fa-message"></i>{" "}
+                    <span className="button__badge">9</span>
                 </Link>
             </li>
             <li>
                 <Link to="/#">
                     <i className="fa-regular fa-user"></i>{" "}
+                    <span className="button__badge">5</span>
                 </Link>
             </li>
             <li>
@@ -21,7 +24,7 @@ const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             </li>
             <li>
                 <Link to={`/profile/me`}>
-                    <i className="fa-solid fa-id-badge"></i>{" "} 
+                    <i className="fa-solid fa-id-badge"></i>{" "}
                     <span>Profile</span>
                 </Link>
             </li>
