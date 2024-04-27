@@ -92,7 +92,9 @@ const ChatRoom = ({
             console.log("Websocket Connection hasn't been established yet");
         }
 
-        inputRef.current.focus();
+        if (inputRef !== null && inputRef.current != null) {
+            inputRef.current.focus();
+        }
 
         return () => {
             if (stompClient && stompClient.connected) {
