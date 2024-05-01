@@ -12,7 +12,6 @@ const Profile = ({
     fetchUserData,
 }) => {
     const { profileId } = useParams();
-    console.log(profileId);
 
     useEffect(() => {
         if (profileId !== "me") {
@@ -22,7 +21,11 @@ const Profile = ({
         }
     }, [isLoading, user]);
 
-    return (isLoading || user === null) ? (
+    const sendFR = () => {
+        // console.log(typeof profileId);
+    };
+
+    return isLoading || user === null ? (
         <Spinner />
     ) : (
         <div className="profile-page">
@@ -46,7 +49,7 @@ const Profile = ({
                 </div>
                 {vprofile.id !== user.id && (
                     <div className="header-section">
-                        <button className="btn btn-primary">
+                        <button className="btn btn-primary" onClick={sendFR}>
                             Send Friend Request
                         </button>
                     </div>

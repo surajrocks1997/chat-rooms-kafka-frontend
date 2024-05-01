@@ -2,9 +2,13 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
-import "./NavBar.css"
+import "./NavBar.css";
 
-const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+const NavBar = ({
+    auth: { isAuthenticated, loading, user },
+    logout,
+    socialInfo: { frPending },
+}) => {
     const authLinks = (
         <ul>
             <li>
@@ -43,7 +47,8 @@ const NavBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                 <>
                     <p>
                         <Link to="/chatRooms">
-                            <i className=""></i>Open Chat Rooms
+                            <i className=""></i>Welcome
+                            {!loading && user === null ? "" : ", " + user.name}
                         </Link>
                     </p>
                     {!loading && authLinks}
@@ -62,6 +67,7 @@ NavBar.propTypes = {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    socialInfo: state.socialInfo,
 });
 
 export default connect(mapStateToProps, { logout })(NavBar);
