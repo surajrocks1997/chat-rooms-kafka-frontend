@@ -2,7 +2,6 @@ import axios from "axios";
 import {
     AUTH_ERROR,
     CLEAR_PROFILE,
-    INIT_SOCIAL_INFO,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
@@ -12,7 +11,7 @@ import {
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
 import { toast } from "react-toastify";
-import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
+import { AUTH_SERVER_URL } from "../config/uri";
 
 export const signUp =
     ({ fullName, signUpEmail, signUpPassword }) =>
@@ -41,23 +40,7 @@ export const signUp =
                 payload: res.data,
             });
 
-            const loadUserRes = await dispatch(loadUser());
-            console.log(loadUserRes);
-
-            const userSocialDetailRes = await axios.post(
-                `${SPRING_SERVER_URL}/initUserSocialDetails`,
-                {
-                    userId: loadUserRes.data.id,
-                },
-                {
-                    withCredentials: true,
-                }
-            );
-
-            dispatch({
-                type: INIT_SOCIAL_INFO,
-                payload: userSocialDetailRes.data,
-            });
+            await dispatch(loadUser());
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
@@ -98,20 +81,10 @@ export const login =
                 payload: res.data,
             });
 
-            const loadUserRes = await dispatch(loadUser());
-
-            const userSocialDetailRes = await axios.get(
-                `${SPRING_SERVER_URL}/getUserSocialDetails/${loadUserRes.data.id}`,
-                {
-                    withCredentials: true,
-                }
-            );
-
-            dispatch({
-                type: INIT_SOCIAL_INFO,
-                payload: userSocialDetailRes.data,
-            });
+            await dispatch(loadUser());
+            // await dispatch(userSocialDetailRes(loadUserRes));
         } catch (err) {
+            console.error(err);
             const errors = err.response.data.errors;
             if (errors) {
                 errors.forEach((error) => {

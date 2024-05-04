@@ -5,24 +5,24 @@ import Spinner from "../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchUserData } from "../../Actions/profile";
+import { sendFriendRequest } from "../../Actions/social";
 
 const Profile = ({
     auth: { user },
-    socialInfo: { isLoading, visitedProfile: vprofile },
+    socialInfo: { isLoading, visitedProfile: vprofile, frSent, frPending },
     fetchUserData,
+    sendFriendRequest,
 }) => {
     const { profileId } = useParams();
 
     useEffect(() => {
-        if (profileId !== "me") {
+        if (user !== null) {
             fetchUserData(profileId);
-        } else if (user !== null) {
-            fetchUserData(user.id);
         }
-    }, [isLoading, user]);
+    }, [isLoading, user, profileId]);
 
     const sendFR = () => {
-        // console.log(typeof profileId);
+        sendFriendRequest(profileId);
     };
 
     return isLoading || user === null ? (
@@ -47,12 +47,43 @@ const Profile = ({
                         <p>{vprofile.name}</p>
                     </div>
                 </div>
-                {vprofile.id !== user.id && (
+                {frPending.includes(profileId) ? (
                     <div className="header-section">
-                        <button className="btn btn-primary" onClick={sendFR}>
-                            Send Friend Request
+                        <button
+                            className="btn btn-success"
+                            // onClick={}
+                        >
+                            Accept
+                        </button>
+                        <button
+                            className="btn btn-danger"
+                            // onClick={}
+                        >
+                            Reject
                         </button>
                     </div>
+                ) : (
+                    vprofile.id !== user.id && (
+                        <div className="header-section">
+                            <button
+                                className={
+                                    frSent.includes(profileId)
+                                        ? "btn btn-light"
+                                        : "btn btn-primary"
+                                }
+                                onClick={sendFR}
+                            >
+                                {frSent.includes(profileId) ? (
+                                    <>
+                                        <span>Friend Request Sent </span>
+                                        <i class="fa-solid fa-check"></i>
+                                    </>
+                                ) : (
+                                    "Send Friend Request"
+                                )}
+                            </button>
+                        </div>
+                    )
                 )}
             </div>
         </div>
@@ -64,7 +95,8 @@ Profile.propTypes = {
     loading: PropTypes.bool,
     isLoading: PropTypes.bool,
     visitedProfile: PropTypes.object,
-    fetchUserData: PropTypes.func,
+    fetchUserData: PropTypes.func.isRequired,
+    sendFriendRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -72,4 +104,6 @@ const mapStateToProps = (state) => ({
     socialInfo: state.socialInfo,
 });
 
-export default connect(mapStateToProps, { fetchUserData })(Profile);
+export default connect(mapStateToProps, { fetchUserData, sendFriendRequest })(
+    Profile
+);

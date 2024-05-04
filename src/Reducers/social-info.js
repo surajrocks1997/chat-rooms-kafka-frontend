@@ -1,4 +1,8 @@
-import { INIT_SOCIAL_INFO, POPULATE_VISITED_PROFILE } from "../Actions/types";
+import {
+    FRIEND_REQUEST_SENT,
+    INIT_SOCIAL_INFO,
+    POPULATE_VISITED_PROFILE,
+} from "../Actions/types";
 
 const initialState = {
     visitedProfile: null,
@@ -24,6 +28,11 @@ const socialInfo = (state = initialState, action) => {
                 friends: payload.friendIds,
                 frPending: payload.friendRequestDetails.received.pending,
                 frSent: payload.friendRequestDetails.sent,
+            };
+        case FRIEND_REQUEST_SENT:
+            return {
+                ...state,
+                frSent: [...state.frSent, payload],
             };
         default:
             return state;

@@ -31,10 +31,11 @@
     padding: 0 50px; 
 }
 
-/* .header-section{
-    border: 2px solid yellow;
-} */
+.header-section{
+    display: flex;
+}
 
 .header-section .btn{
     border-radius: 20px;
+    margin: 0 15px;
 }

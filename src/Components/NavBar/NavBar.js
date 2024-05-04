@@ -3,31 +3,57 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
 import "./NavBar.css";
+import { useEffect } from "react";
 
 const NavBar = ({
     auth: { isAuthenticated, loading, user },
     logout,
     socialInfo: { frPending },
 }) => {
-    const authLinks = (
+    const authLinks = () => (
         <ul>
             <li>
                 <Link to="/#">
-                    <i className="fa-regular fa-message"></i>{" "}
-                    <span className="button__badge">9</span>
+                    <i className="fa-regular fa-user"></i>{" "}
+                    <span
+                        className={
+                            frPending.length > 0 ? "button__badge" : "no_badge"
+                        }
+                    >
+                        {frPending.length > 0 ? frPending.length : ""}
+                    </span>
                 </Link>
             </li>
             <li>
                 <Link to="/#">
-                    <i className="fa-regular fa-user"></i>{" "}
-                    <span className="button__badge">5</span>
+                    <i className="fa-regular fa-message"></i>{" "}
+                    <span
+                        className={
+                            frPending.length > 0 ? "button__badge" : "no_badge"
+                        }
+                    >
+                        {frPending.length > 0 ? frPending.length : ""}
+                    </span>
                 </Link>
             </li>
+            <li>
+                <Link to="/#">
+                    <i className="fa-solid fa-earth-americas"></i>{" "}
+                    <span
+                        className={
+                            frPending.length > 0 ? "button__badge" : "no_badge"
+                        }
+                    >
+                        {frPending.length > 0 ? frPending.length : ""}
+                    </span>
+                </Link>
+            </li>
+
             <li>
                 <Link to="/insights">Insights</Link>
             </li>
             <li>
-                <Link to={`/profile/me`}>
+                <Link to={`/profile/${user.id}`}>
                     <i className="fa-solid fa-id-badge"></i>{" "}
                     <span>Profile</span>
                 </Link>
@@ -51,7 +77,7 @@ const NavBar = ({
                             {!loading && user === null ? "" : ", " + user.name}
                         </Link>
                     </p>
-                    {!loading && authLinks}
+                    {user!== null && authLinks(user.id)}
                 </>
             )}
         </div>
