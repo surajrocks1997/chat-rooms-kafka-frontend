@@ -136,7 +136,7 @@ const ChatRoom = ({
             JSON.stringify({
                 messageType: "PRIVATE_MESSAGE",
                 username: user.email,
-                userId: user.id,
+                // userId: user.id,
                 receiver: "jdoe@email.com",
                 message: chatText,
             })

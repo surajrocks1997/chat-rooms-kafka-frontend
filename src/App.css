@@ -128,7 +128,7 @@ ul {
     text-decoration: none;
 }
 
-.navbar a:hover {
+.navbar i:hover {
     color: var(--primary-color);
 }
 
