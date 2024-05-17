@@ -2,6 +2,7 @@ import axios from "axios";
 import { FRIEND_REQUEST_SENT, INIT_SOCIAL_INFO } from "./types";
 import { SPRING_SERVER_URL } from "../config/uri";
 import { toast } from "react-toastify";
+import { loadFriendRequestProfiles } from "./navbar";
 
 export const userSocialDetailRes = (userId) => async (dispatch) => {
     const res = await axios.get(
@@ -10,6 +11,14 @@ export const userSocialDetailRes = (userId) => async (dispatch) => {
             withCredentials: true,
         }
     );
+
+    var pending = res.data.friendRequestDetails.received.pending;
+    if (pending.length > 0) {
+        const pendingUserProfiles = await dispatch(
+            loadFriendRequestProfiles(pending)
+        );
+        res.data.friendRequestDetails.received.pending = pendingUserProfiles;
+    }
 
     dispatch({
         type: INIT_SOCIAL_INFO,
@@ -25,8 +34,8 @@ export const sendFriendRequest = (receiverId) => async (dispatch) => {
 
         dispatch({
             type: FRIEND_REQUEST_SENT,
-            payload: receiverId
-        })
+            payload: receiverId,
+        });
     } catch (error) {
         toast.error("Friend Request Could Not be Sent. Please Try Again");
     }

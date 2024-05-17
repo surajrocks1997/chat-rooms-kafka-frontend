@@ -54,23 +54,31 @@ const NavBar = ({
                             fRDD === true ? "dropdown dropdown-content" : ""
                         }
                     >
-                        {fRDD && (
-                            <div className="container frdd">
-                                <div className="profile-photo">
-                                    <img
-                                        src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
-                                        alt="user"
-                                        style={{
-                                            width: "40px",
-                                            display: "block",
-                                        }}
-                                    ></img>
-                                </div>
-                                <div className="name">Suraj Gupta</div>
-                                <div className="fr-action">
-                                    <button className="btn btn-primary">Accept</button>
-                                    <button className="btn btn-danger">Reject</button>
-                                </div>
+                        {fRDD && frPending.length > 0 && (
+                            <div className="container ">
+                                {frPending.map((item) => (
+                                    <div className="frdd">
+                                        <div className="profile-photo">
+                                            <img
+                                                src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
+                                                alt="user"
+                                                style={{
+                                                    width: "40px",
+                                                    display: "block",
+                                                }}
+                                            ></img>
+                                        </div>
+                                        <div className="name">{item.name}</div>
+                                        <div className="fr-action">
+                                            <button className="btn btn-success">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                            <button className="btn btn-danger">
+                                                <i class="fa-solid fa-x"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>

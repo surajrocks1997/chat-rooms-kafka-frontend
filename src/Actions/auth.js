@@ -11,7 +11,7 @@ import {
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
 import { toast } from "react-toastify";
-import { AUTH_SERVER_URL } from "../config/uri";
+import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
 
 export const signUp =
     ({ fullName, signUpEmail, signUpPassword }) =>
@@ -40,7 +40,11 @@ export const signUp =
                 payload: res.data,
             });
 
-            await dispatch(loadUser());
+            const user = await dispatch(loadUser());
+            await axios.post(
+                SPRING_SERVER_URL + "/initUserSocialDetails",
+                user.data
+            );
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
