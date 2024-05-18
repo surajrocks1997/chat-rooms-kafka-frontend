@@ -55,9 +55,9 @@ const NavBar = ({
                         }
                     >
                         {fRDD && frPending.length > 0 && (
-                            <div className="container ">
-                                {frPending.map((item) => (
-                                    <div className="frdd">
+                            <div>
+                                {frPending.map((item, index) => (
+                                    <div className="frdd" key={item.email}>
                                         <div className="profile-photo">
                                             <img
                                                 src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
@@ -71,10 +71,10 @@ const NavBar = ({
                                         <div className="name">{item.name}</div>
                                         <div className="fr-action">
                                             <button className="btn btn-success">
-                                                <i class="fa-solid fa-check"></i>
+                                                <i className="fa-solid fa-check"></i>
                                             </button>
                                             <button className="btn btn-danger">
-                                                <i class="fa-solid fa-x"></i>
+                                                <i className="fa-solid fa-x"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -90,23 +90,26 @@ const NavBar = ({
                         className="fa-regular fa-message"
                         onClick={() => setDDTrue(1)}
                     ></i>{" "}
-                    <span
-                        className={
-                            frPending.length > 0 ? "button__badge" : "no_badge"
-                        }
-                    >
-                        {frPending.length > 0 ? frPending.length : ""}
+                    <span className={0 ? "button__badge" : "no_badge"}>
+                        {0 ? frPending.length : ""}
                     </span>
                     <div
                         className={
                             mDD === true ? "dropdown dropdown-content" : ""
                         }
                     >
-                        {mDD && "MY DATA HERE"}
+                        {mDD && (
+                            <div className="container">
+                                <div className="banner">No New Messages</div>
+                                <button className="btn btn-primary">
+                                    Jump To Chat Page
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </Link>
             </li>
-            <li>
+            {/* <li>
                 <Link>
                     <i
                         className="fa-solid fa-earth-americas"
@@ -127,7 +130,7 @@ const NavBar = ({
                         {nDD && "MY DATA HERE"}
                     </div>
                 </Link>
-            </li>
+            </li> */}
 
             <li>
                 <Link to="/insights">Insights</Link>
