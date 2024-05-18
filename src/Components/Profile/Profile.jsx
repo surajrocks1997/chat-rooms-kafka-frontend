@@ -5,22 +5,23 @@ import Spinner from "../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchUserData } from "../../Actions/profile";
-import { sendFriendRequest } from "../../Actions/social";
+import { sendFriendRequest, userSocialDetailRes } from "../../Actions/social";
 
 const Profile = ({
     auth: { user },
     socialInfo: { isLoading, visitedProfile: vprofile, frSent, frPending },
     fetchUserData,
     sendFriendRequest,
+    userSocialDetailRes,
 }) => {
     const { profileId } = useParams();
 
     useEffect(() => {
         if (user !== null) {
             fetchUserData(profileId);
+            userSocialDetailRes(user.id);
         }
-
-    }, [isLoading, user, profileId, frPending]);
+    }, [user]);
 
     const sendFR = () => {
         sendFriendRequest(profileId);
@@ -98,6 +99,7 @@ Profile.propTypes = {
     visitedProfile: PropTypes.object,
     fetchUserData: PropTypes.func.isRequired,
     sendFriendRequest: PropTypes.func.isRequired,
+    userSocialDetailRes: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -105,6 +107,8 @@ const mapStateToProps = (state) => ({
     socialInfo: state.socialInfo,
 });
 
-export default connect(mapStateToProps, { fetchUserData, sendFriendRequest })(
-    Profile
-);
+export default connect(mapStateToProps, {
+    fetchUserData,
+    sendFriendRequest,
+    userSocialDetailRes,
+})(Profile);

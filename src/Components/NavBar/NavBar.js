@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
 import "./NavBar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NavBar = ({
     auth: { isAuthenticated, loading, user },
@@ -168,12 +168,16 @@ const NavBar = ({
 
     return (
         <div className="navbar">
-            {isAuthenticated && (
+            {!loading && isAuthenticated && (
                 <>
                     <p>
                         <Link to="/chatRooms">
                             <i className=""></i>Welcome
-                            {!loading && user === null ? "" : ", " + user.name}
+                            {user === null ? (
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            ) : (
+                                ", " + user.name
+                            )}
                         </Link>
                     </p>
                     {user !== null && authLinks(user.id)}

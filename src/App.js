@@ -42,7 +42,10 @@ const App = () => {
                 <Routes>
                     <Route element={<WelcomePage />} path="/" />
                     <Route element={<PrivateRoute />} path="/">
-                        <Route path="/profile/:profileId" element={<Profile />} />
+                        <Route
+                            path="/profile/:profileId"
+                            element={<Profile />}
+                        />
                         <Route path="/chatRooms" element={<ChatShowRoom />} />
                         <Route
                             path="/chatRooms/:chatRoom"

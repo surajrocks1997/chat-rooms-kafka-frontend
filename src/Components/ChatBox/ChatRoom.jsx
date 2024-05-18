@@ -42,52 +42,14 @@ const ChatRoom = ({
             navigate("/chatRooms");
         }
 
-        const onMessageRecieved = (payload) => {
-            console.log("FROM ON MESSAGE RECIEVED");
-            var message = JSON.parse(payload.body);
-            if (message.messageType === CHAT_MESSAGE) {
-                addMessage(message);
-            } else if (message.messageType === USER_ONLINE) {
-                addUserToOnline(message.additionalData);
-            } else if (message.messageType === USER_OFFLINE) {
-                removeUserFromOnline(message.additionalData);
+        if (stompClient) {
+            if (stompClient.connected) {
+                setupSubscriptions(stompClient);
             } else {
-                /////////////////////////////////////////////////////////
-                if (message.messageType === "PRIVATE_MESSAGE") {
-                    console.log("From PRIVATE MESSAGE");
-                }
-                /////////////////////////////////////////////////////////
-                else {
-                    console.warn(message);
-                }
+                stompClient.connectCallback = function (frame) {
+                    setupSubscriptions(stompClient);
+                };
             }
-        };
-
-        if (stompClient && stompClient.connected) {
-            setStompClient(stompClient);
-            stompClient.subscribe(
-                `/topic/chatRoom.${chatRoom}`,
-                onMessageRecieved,
-                { id: chatRoom }
-            );
-            /////////////////////////////////////////////////////////
-            stompClient.subscribe(
-                `/user/${user.email}/queue/messages`,
-                onMessageRecieved,
-                {}
-            );
-            /////////////////////////////////////////////////////////
-
-            stompClient.send(
-                `/app/chatRoom/${chatRoom}`,
-                {},
-                JSON.stringify({
-                    messageType: USER_ONLINE,
-                    username: user.email,
-                    userId: user.id,
-                    chatRoomName: chatRoom,
-                })
-            );
         } else {
             console.log("Websocket Connection hasn't been established yet");
         }
@@ -114,6 +76,54 @@ const ChatRoom = ({
             clearActiveChatRoomState();
         };
     }, []);
+
+    const onMessageRecieved = (payload) => {
+        console.log("FROM ON MESSAGE RECIEVED");
+        var message = JSON.parse(payload.body);
+        if (message.messageType === CHAT_MESSAGE) {
+            addMessage(message);
+        } else if (message.messageType === USER_ONLINE) {
+            addUserToOnline(message.additionalData);
+        } else if (message.messageType === USER_OFFLINE) {
+            removeUserFromOnline(message.additionalData);
+        } else {
+            /////////////////////////////////////////////////////////
+            if (message.messageType === "PRIVATE_MESSAGE") {
+                console.log("From PRIVATE MESSAGE");
+            }
+            /////////////////////////////////////////////////////////
+            else {
+                console.warn(message);
+            }
+        }
+    };
+
+    const setupSubscriptions = (stompClient) => {
+        setStompClient(stompClient);
+        stompClient.subscribe(
+            `/topic/chatRoom.${chatRoom}`,
+            onMessageRecieved,
+            { id: chatRoom }
+        );
+        /////////////////////////////////////////////////////////
+        stompClient.subscribe(
+            `/user/${user.email}/queue/messages`,
+            onMessageRecieved,
+            {}
+        );
+        /////////////////////////////////////////////////////////
+
+        stompClient.send(
+            `/app/chatRoom/${chatRoom}`,
+            {},
+            JSON.stringify({
+                messageType: USER_ONLINE,
+                username: user.email,
+                userId: user.id,
+                chatRoomName: chatRoom,
+            })
+        );
+    };
 
     const sendMessage = () => {
         if (chatText === "") return;
