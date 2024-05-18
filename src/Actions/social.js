@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FRIEND_REQUEST_SENT, INIT_SOCIAL_INFO } from "./types";
+import { FRIEND_REQUEST_SENT, GET_SOCIAL_INFO } from "./types";
 import { SPRING_SERVER_URL } from "../config/uri";
 import { toast } from "react-toastify";
 import { loadFriendRequestProfiles } from "./navbar";
@@ -21,7 +21,7 @@ export const userSocialDetailRes = (userId) => async (dispatch) => {
     }
 
     dispatch({
-        type: INIT_SOCIAL_INFO,
+        type: GET_SOCIAL_INFO,
         payload: res.data,
     });
 };

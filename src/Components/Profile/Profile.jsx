@@ -19,7 +19,8 @@ const Profile = ({
         if (user !== null) {
             fetchUserData(profileId);
         }
-    }, [isLoading, user, profileId]);
+
+    }, [isLoading, user, profileId, frPending]);
 
     const sendFR = () => {
         sendFriendRequest(profileId);
@@ -47,7 +48,7 @@ const Profile = ({
                         <p>{vprofile.name}</p>
                     </div>
                 </div>
-                {frPending.includes(profileId) ? (
+                {frPending.some((ele) => ele.id === Number(profileId)) ? (
                     <div className="header-section">
                         <button
                             className="btn btn-success"

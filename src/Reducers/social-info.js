@@ -1,6 +1,6 @@
 import {
     FRIEND_REQUEST_SENT,
-    INIT_SOCIAL_INFO,
+    GET_SOCIAL_INFO,
     POPULATE_VISITED_PROFILE,
 } from "../Actions/types";
 
@@ -22,7 +22,7 @@ const socialInfo = (state = initialState, action) => {
                 visitedProfile: payload,
                 isLoading: false,
             };
-        case INIT_SOCIAL_INFO:
+        case GET_SOCIAL_INFO:
             return {
                 ...state,
                 friends: payload.friendIds,

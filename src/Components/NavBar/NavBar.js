@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { logout } from "../../Actions/auth";
 import "./NavBar.css";
@@ -13,6 +13,8 @@ const NavBar = ({
     const [fRDD, setFRDD] = useState(false);
     const [mDD, setMDD] = useState(false);
     const [nDD, setNDD] = useState(false);
+
+    const navigate = useNavigate();
 
     const setDDTrue = (position) => {
         switch (position) {
@@ -34,12 +36,18 @@ const NavBar = ({
         }
     };
 
+    const fRDDActions = (e, position, id) => {
+        e.preventDefault();
+        setDDTrue(position);
+        navigate(`/profile/${id}`);
+    };
+
     const authLinks = () => (
         <ul>
             <li>
                 <Link>
                     <i
-                        className="fa-regular fa-user navbar-hover"
+                        className="fa-regular fa-user"
                         onClick={() => setDDTrue(0)}
                     ></i>{" "}
                     <span
@@ -70,6 +78,14 @@ const NavBar = ({
                                         </div>
                                         <div className="name">{item.name}</div>
                                         <div className="fr-action">
+                                            <button
+                                                className="btn btn-primary"
+                                                onClick={(e) => {
+                                                    fRDDActions(e, 0, item.id);
+                                                }}
+                                            >
+                                                <i className="fa-regular fa-user"></i>
+                                            </button>
                                             <button className="btn btn-success">
                                                 <i className="fa-solid fa-check"></i>
                                             </button>
