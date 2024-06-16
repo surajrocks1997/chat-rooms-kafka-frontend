@@ -21,7 +21,7 @@ const Profile = ({
             fetchUserData(profileId);
             userSocialDetailRes(user.id);
         }
-    }, [user]);
+    }, [profileId,user]);
 
     const sendFR = () => {
         sendFriendRequest(profileId);

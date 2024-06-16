@@ -1,12 +1,14 @@
 .parent-chat {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .left-container{
     display: flex;
     flex-direction: column;
-    flex: 2;
+    /* flex: 2; */
+    min-width: 350px;
+    max-width: 450px;
 }
 
 .room-insight{
@@ -33,7 +35,7 @@
 .online-presence {
     display: flex;
     align-items: center;
-    height: 3vh;
+    height: 30px;
     padding: 5px 20px;
     margin: 3px 10px;
     background-color: #647ca4;
@@ -64,8 +66,9 @@
     flex: 5;
     width: 100%;
     flex-direction: column;
-    height: 92vh;
+    height: calc(100vh - 70px);
     /* border: 2px dashed red; */
+    max-width: 1200px;
 }
 
 .input-container {

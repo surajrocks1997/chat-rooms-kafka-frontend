@@ -45,11 +45,12 @@ const NavBar = ({
     const authLinks = () => (
         <ul>
             <li>
-                <Link>
+                <Link onClick={() => setDDTrue(0)} style={{
+                    border: "2px solid red"
+                }}>
                     <i
                         className="fa-regular fa-user"
-                        onClick={() => setDDTrue(0)}
-                    ></i>{" "}
+                    ></i>
                     <span
                         className={
                             frPending.length > 0 ? "button__badge" : "no_badge"
@@ -105,7 +106,7 @@ const NavBar = ({
                     <i
                         className="fa-regular fa-message"
                         onClick={() => setDDTrue(1)}
-                    ></i>{" "}
+                    ></i>
                     <span className={0 ? "button__badge" : "no_badge"}>
                         {0 ? frPending.length : ""}
                     </span>
@@ -130,7 +131,7 @@ const NavBar = ({
                     <i
                         className="fa-solid fa-earth-americas"
                         onClick={() => setDDTrue(2)}
-                    ></i>{" "}
+                    ></i>
                     <span
                         className={
                             frPending.length > 0 ? "button__badge" : "no_badge"
@@ -159,7 +160,7 @@ const NavBar = ({
             </li>
             <li>
                 <Link to="/" onClick={logout}>
-                    <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i>
                     <span className="hide-sm"> Logout</span>
                 </Link>
             </li>
