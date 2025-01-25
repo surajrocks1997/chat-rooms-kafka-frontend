@@ -45,12 +45,8 @@ const NavBar = ({
     const authLinks = () => (
         <ul>
             <li>
-                <Link onClick={() => setDDTrue(0)} style={{
-                    border: "2px solid red"
-                }}>
-                    <i
-                        className="fa-regular fa-user"
-                    ></i>
+                <Link onClick={() => setDDTrue(0)}>
+                    <i className="fa-regular fa-user"></i>
                     <span
                         className={
                             frPending.length > 0 ? "button__badge" : "no_badge"
