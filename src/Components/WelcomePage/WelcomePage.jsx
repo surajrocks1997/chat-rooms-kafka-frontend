@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { signUp, login } from "../../Actions/auth";
 import "./WelcomePage.css";
 import { generateToastifyError } from "../../Actions/toastify";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
     const navigate = useNavigate();
@@ -54,6 +55,13 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
             signUp({ fullName, signUpEmail, signUpPassword });
         }
     };
+
+    const initiateGoogleLogin = useGoogleLogin({
+        onSuccess: (successResponse) => console.log(successResponse),
+        onError: (errorResponse) => console.log(errorResponse),
+        flow: "auth-code",
+        ux_mode: "popup",
+    });
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
@@ -173,7 +181,10 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
 
                         <div className="external-logins">
                             <p>or you can sign in with:</p>
-                            <i className="fa-brands fa-google fa-lg"></i>
+                            <i
+                                className="fa-brands fa-google fa-lg"
+                                onClick={() => initiateGoogleLogin()}
+                            ></i>
                             <i className="fa-brands fa-facebook-f fa-lg"></i>
                         </div>
                     </div>
