@@ -12,6 +12,7 @@ import { loadUser } from "./Actions/auth";
 import setAuthToken from "./utils/axiosTokenHeader";
 import NavBar from "./Components/NavBar/NavBar";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
+import Profile from "./Components/Profile/Profile";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -41,6 +42,10 @@ const App = () => {
                 <Routes>
                     <Route element={<WelcomePage />} path="/" />
                     <Route element={<PrivateRoute />} path="/">
+                        <Route
+                            path="/profile/:profileId"
+                            element={<Profile />}
+                        />
                         <Route path="/chatRooms" element={<ChatShowRoom />} />
                         <Route
                             path="/chatRooms/:chatRoom"

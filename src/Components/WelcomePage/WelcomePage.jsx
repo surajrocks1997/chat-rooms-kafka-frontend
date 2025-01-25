@@ -6,7 +6,7 @@ import { signUp, login } from "../../Actions/auth";
 import "./WelcomePage.css";
 import { generateToastifyError } from "../../Actions/toastify";
 
-const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
+const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
     const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState(0);
@@ -49,14 +49,14 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
     const onSubmitSignUp = (e) => {
         e.preventDefault();
         if (signUpPassword !== signUpConfirmPassword) {
-            generateToastifyError("Passwords do not match!")
+            generateToastifyError("Passwords do not match!");
         } else {
             signUp({ fullName, signUpEmail, signUpPassword });
         }
     };
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (!loading && isAuthenticated) {
             navigate("/chatRooms");
         }
     });
@@ -170,6 +170,9 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated } }) => {
                                 setActiveForm(activeForm === 1 ? 0 : 1)
                             }
                         />
+                        {loading && (
+                            <i className="fa-solid fa-spinner fa-spin"></i>
+                        )}
                     </div>
                 </div>
             </div>

@@ -7,15 +7,24 @@ import {
     LOGOUT,
     REGISTER_FAIL,
     REGISTER_SUCCESS,
+    SET_AUTH_LOADING,
     USER_LOADED,
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
+import { toast } from "react-toastify";
+import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
 
-const AUTH_SERVER_URL = "http://localhost:5000/api";
+export const setAuthLoading = (isLoading) => (dispatch) => {
+    dispatch({
+        type: SET_AUTH_LOADING,
+        payload: isLoading,
+    });
+};
 
 export const signUp =
     ({ fullName, signUpEmail, signUpPassword }) =>
     async (dispatch) => {
+        dispatch(setAuthLoading(true));
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -35,16 +44,29 @@ export const signUp =
                 config
             );
 
-            dispatch({
+            await axios.post(
+                SPRING_SERVER_URL + "/initUserSocialDetails",
+                res.data,
+                {
+                    headers: {
+                        "x-auth-token": res.data.token,
+                    },
+                }
+            );
+
+            await dispatch({
                 type: REGISTER_SUCCESS,
                 payload: res.data,
             });
 
-            dispatch(loadUser());
+            await dispatch(loadUser());
         } catch (err) {
             const errors = err.response.data.errors;
             if (errors) {
-                errors.forEach((error) => console.log(error.msg));
+                errors.forEach((error) => {
+                    console.log(error.msg);
+                    toast.error(error.msg);
+                });
             }
 
             dispatch({
@@ -56,6 +78,7 @@ export const signUp =
 export const login =
     ({ loginEmail, loginPassword }) =>
     async (dispatch) => {
+        dispatch(setAuthLoading(true));
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -78,11 +101,15 @@ export const login =
                 payload: res.data,
             });
 
-            dispatch(loadUser());
+            await dispatch(loadUser());
         } catch (err) {
+            console.error(err);
             const errors = err.response.data.errors;
             if (errors) {
-                errors.forEach((error) => console.log(error.msg));
+                errors.forEach((error) => {
+                    console.log(error.msg);
+                    toast.error(error.msg);
+                });
             }
 
             dispatch({
@@ -98,10 +125,11 @@ export const loadUser = () => async (dispatch) => {
 
     try {
         const res = await axios.get(`${AUTH_SERVER_URL}/auth`);
-        dispatch({
+        await dispatch({
             type: USER_LOADED,
             payload: res.data,
         });
+        return res;
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,

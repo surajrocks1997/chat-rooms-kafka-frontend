@@ -8,7 +8,7 @@ import GraphsInsight from "./GraphsInsight";
 const Insights = ({ getInitData }) => {
     useEffect(() => {
         getInitData();
-        console.log("From Landing Page");
+        // console.log("From Landing Page");
     }, []);
 
     return (

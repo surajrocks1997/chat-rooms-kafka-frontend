@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,6 +28,7 @@ const ChatRoom = ({
     const [stompClient, setStompClient] = useState(null);
     const [chatText, setChatText] = useState("");
     const { chatRoom } = useParams();
+    const inputRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,39 +42,20 @@ const ChatRoom = ({
             navigate("/chatRooms");
         }
 
-        const onMessageRecieved = (payload) => {
-            console.log("FROM ON MESSAGE RECIEVED");
-            var message = JSON.parse(payload.body);
-            if (message.messageType === CHAT_MESSAGE) {
-                addMessage(message);
-            } else if (message.messageType === USER_ONLINE) {
-                addUserToOnline(message.additionalData);
-            } else if (message.messageType === USER_OFFLINE) {
-                removeUserFromOnline(message.additionalData);
+        if (stompClient) {
+            if (stompClient.connected) {
+                setupSubscriptions(stompClient);
             } else {
-                console.warn(message);
+                stompClient.connectCallback = function (frame) {
+                    setupSubscriptions(stompClient);
+                };
             }
-        };
-
-        if (stompClient && stompClient.connected) {
-            setStompClient(stompClient);
-            stompClient.subscribe(
-                `/topic/chatRoom.${chatRoom}`,
-                onMessageRecieved,
-                { id: chatRoom }
-            );
-
-            stompClient.send(
-                `/app/chatRoom/${chatRoom}`,
-                {},
-                JSON.stringify({
-                    messageType: USER_ONLINE,
-                    username: user.email,
-                    chatRoomName: chatRoom,
-                })
-            );
         } else {
             console.log("Websocket Connection hasn't been established yet");
+        }
+
+        if (inputRef !== null && inputRef.current != null) {
+            inputRef.current.focus();
         }
 
         return () => {
@@ -84,6 +66,7 @@ const ChatRoom = ({
                     JSON.stringify({
                         messageType: USER_OFFLINE,
                         username: user.email,
+                        userId: user.id,
                         chatRoomName: chatRoom,
                     })
                 );
@@ -92,20 +75,93 @@ const ChatRoom = ({
 
             clearActiveChatRoomState();
         };
-    }, [stompClient]);
+    }, []);
+
+    const onMessageRecieved = (payload) => {
+        console.log("FROM ON MESSAGE RECIEVED");
+        var message = JSON.parse(payload.body);
+        if (message.messageType === CHAT_MESSAGE) {
+            addMessage(message);
+        } else if (message.messageType === USER_ONLINE) {
+            addUserToOnline(message.additionalData);
+        } else if (message.messageType === USER_OFFLINE) {
+            removeUserFromOnline(message.additionalData);
+        } else {
+            /////////////////////////////////////////////////////////
+            if (message.messageType === "PRIVATE_MESSAGE") {
+                console.log("From PRIVATE MESSAGE");
+            }
+            /////////////////////////////////////////////////////////
+            else {
+                console.warn(message);
+            }
+        }
+    };
+
+    const setupSubscriptions = (stompClient) => {
+        setStompClient(stompClient);
+        stompClient.subscribe(
+            `/topic/chatRoom.${chatRoom}`,
+            onMessageRecieved,
+            { id: chatRoom }
+        );
+        /////////////////////////////////////////////////////////
+        stompClient.subscribe(
+            `/user/${user.email}/queue/messages`,
+            onMessageRecieved,
+            {}
+        );
+        /////////////////////////////////////////////////////////
+
+        stompClient.send(
+            `/app/chatRoom/${chatRoom}`,
+            {},
+            JSON.stringify({
+                messageType: USER_ONLINE,
+                username: user.email,
+                userId: user.id,
+                chatRoomName: chatRoom,
+            })
+        );
+    };
 
     const sendMessage = () => {
+        if (chatText === "") return;
         stompClient.send(
             `/app/chatRoom/${chatRoom}`,
             {},
             JSON.stringify({
                 messageType: CHAT_MESSAGE,
                 username: user.email,
+                userId: user.id,
                 chatRoomName: chatRoom,
                 message: chatText,
             })
         );
+
+        /////////////////////////////////////////////////////////
+        stompClient.send(
+            `/app/privateMessage/jdoe@email.com`,
+            {},
+            JSON.stringify({
+                messageType: "PRIVATE_MESSAGE",
+                username: user.email,
+                // userId: user.id,
+                receiver: "jdoe@email.com",
+                message: chatText,
+            })
+        );
+        /////////////////////////////////////////////////////////
+
         setChatText("");
+    };
+
+    const handleKeyUp = (e) => {
+        // handle enter key. key code for enter press is 13
+        if (e.keyCode === 13) {
+            document.getElementById("send-button").click();
+            inputRef.current.focus();
+        }
     };
 
     return loading ? (
@@ -149,6 +205,9 @@ const ChatRoom = ({
                     <div className="input-container">
                         <input
                             type="text"
+                            ref={inputRef}
+                            onKeyUp={handleKeyUp}
+                            id="text-message"
                             value={chatText}
                             onChange={(e) => setChatText(e.target.value)}
                             placeholder="Please Type Some Message here!!"
@@ -156,6 +215,7 @@ const ChatRoom = ({
                         />
                         <input
                             className="btn-primary"
+                            id="send-button"
                             type="button"
                             value="Send"
                             onClick={sendMessage}

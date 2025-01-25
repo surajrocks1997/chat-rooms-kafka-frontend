@@ -6,8 +6,14 @@ import "./ChatShowRoom.css";
 import { useEffect } from "react";
 import InitConnectionManager from "../../config/InitConnectionManager";
 import { fetchSSEData } from "../../Actions/insights";
+import { userSocialDetailRes } from "../../Actions/social";
 
-const ChatShowRoom = ({ setActiveChatRoom, fetchSSEData }) => {
+const ChatShowRoom = ({
+    setActiveChatRoom,
+    fetchSSEData,
+    userSocialDetailRes,
+    auth: { user },
+}) => {
     const navigate = useNavigate();
     const chatRoomTopics = [
         "Sports",
@@ -32,8 +38,10 @@ const ChatShowRoom = ({ setActiveChatRoom, fetchSSEData }) => {
             fetchSSEData(sseData);
         }
 
-        
-    });
+        if (user !== null) {
+            userSocialDetailRes(user.id);
+        }
+    }, [user]);
     return (
         <div className="chat-show-room">
             <p>Select a Chat Room Topic you wish to chat on.</p>
@@ -64,8 +72,11 @@ ChatShowRoom.propTypes = {
 
 const mapStateToProps = (state) => ({
     userInfo: state.userInfo,
+    auth: state.auth,
 });
 
-export default connect(mapStateToProps, { setActiveChatRoom, fetchSSEData })(
-    ChatShowRoom
-);
+export default connect(mapStateToProps, {
+    setActiveChatRoom,
+    fetchSSEData,
+    userSocialDetailRes,
+})(ChatShowRoom);

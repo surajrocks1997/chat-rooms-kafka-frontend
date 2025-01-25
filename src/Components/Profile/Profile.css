@@ -1,0 +1,41 @@
+.profile-page{
+    /* border: 2px solid white; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    /* border: 2px solid blue; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin:30px 50px;
+}
+
+.header-info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+}
+
+/* .profile-photo{
+    border: 2px solid red;
+} */
+
+.profile-name{
+    /* border: 2px solid yellow; */
+    font-size: 2rem;
+    padding: 0 50px; 
+}
+
+.header-section{
+    display: flex;
+}
+
+.header-section .btn{
+    border-radius: 20px;
+    margin: 0 15px;
+}
