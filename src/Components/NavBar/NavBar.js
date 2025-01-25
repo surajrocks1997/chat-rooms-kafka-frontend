@@ -164,9 +164,9 @@ const NavBar = ({
     );
 
     return (
-        <div className="navbar">
+        <>
             {!loading && isAuthenticated && (
-                <>
+                <div className="navbar">
                     <p>
                         <Link to="/chatRooms">
                             <i className=""></i>Welcome
@@ -178,9 +178,9 @@ const NavBar = ({
                         </Link>
                     </p>
                     {user !== null && authLinks(user.id)}
-                </>
+                </div>
             )}
-        </div>
+        </>
     );
 };
 

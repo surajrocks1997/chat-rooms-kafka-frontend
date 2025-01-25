@@ -66,7 +66,7 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
             <div className="welcome-page">
                 <div className="background"></div>
                 <div className="content">
-                    <div className="title">Welcome to Chat Rooms!!</div>
+                    <div className="title">Welcome</div>
                     <br />
                     <div className="form">
                         {activeForm === 0 && (
@@ -169,10 +169,13 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
                             onClick={() =>
                                 setActiveForm(activeForm === 1 ? 0 : 1)
                             }
-                        />
-                        {loading && (
-                            <i className="fa-solid fa-spinner fa-spin"></i>
-                        )}
+                        ></input>
+
+                        <div className="external-logins">
+                            <p>or you can sign in with:</p>
+                            <i className="fa-brands fa-google fa-lg"></i>
+                            <i className="fa-brands fa-facebook-f fa-lg"></i>
+                        </div>
                     </div>
                 </div>
             </div>
