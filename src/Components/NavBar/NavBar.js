@@ -149,7 +149,7 @@ const NavBar = ({
                 <Link to="/insights">Insights</Link>
             </li>
             <li>
-                <Link to={`/profile/${user.id}`}>
+                <Link to={`/profile/${user.username}`}>
                     <i className="fa-solid fa-id-badge"></i>{" "}
                     <span>Profile</span>
                 </Link>
@@ -173,7 +173,7 @@ const NavBar = ({
                             {user === null ? (
                                 <i class="fa-solid fa-spinner fa-spin"></i>
                             ) : (
-                                ", " + user.name
+                                ", " + user.firstName
                             )}
                         </Link>
                     </p>

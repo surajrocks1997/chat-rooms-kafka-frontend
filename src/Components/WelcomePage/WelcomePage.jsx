@@ -2,12 +2,18 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signUp, login } from "../../Actions/auth";
+import { signUp, login, googleAuth } from "../../Actions/auth";
 import "./WelcomePage.css";
 import { generateToastifyError } from "../../Actions/toastify";
 import { useGoogleLogin } from "@react-oauth/google";
+import Spinner from "../Spinner/Spinner";
 
-const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
+const WelcomePage = ({
+    signUp,
+    googleAuth,
+    login,
+    auth: { isAuthenticated, loading },
+}) => {
     const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState(0);
@@ -57,7 +63,10 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
     };
 
     const initiateGoogleLogin = useGoogleLogin({
-        onSuccess: (successResponse) => console.log(successResponse),
+        onSuccess: (res) => {
+            console.log(res);
+            googleAuth(res.code);
+        },
         onError: (errorResponse) => console.log(errorResponse),
         flow: "auth-code",
         ux_mode: "popup",
@@ -69,7 +78,9 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
         }
     });
 
-    return (
+    return loading ? (
+        <Spinner />
+    ) : (
         <section className="landing">
             <div className="welcome-page">
                 <div className="background"></div>
@@ -197,6 +208,7 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
 WelcomePage.propTypes = {
     signUp: PropTypes.func,
     login: PropTypes.func,
+    googleAuth: PropTypes.func,
     isAuthenticated: PropTypes.bool,
 };
 
@@ -207,4 +219,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     signUp,
     login,
+    googleAuth,
 })(WelcomePage);

@@ -1,5 +1,7 @@
 import {
     AUTH_ERROR,
+    GOOGLE_LOGIN_FAIL,
+    GOOGLE_LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
@@ -10,7 +12,7 @@ import {
 } from "../Actions/types";
 
 const initialState = {
-    token: localStorage.getItem("token"),
+    // token: localStorage.getItem("token"),
     isAuthenticated: null,
     loading: false,
     user: null,
@@ -34,19 +36,19 @@ const auth = (state = initialState, action) => {
             };
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-            localStorage.setItem("token", payload.token);
+        case GOOGLE_LOGIN_SUCCESS:
+            localStorage.setItem("token", payload.accessToken);
             return {
                 ...state,
-                ...payload,
             };
         case REGISTER_FAIL:
         case LOGIN_FAIL:
+        case GOOGLE_LOGIN_FAIL:
         case AUTH_ERROR:
         case LOGOUT:
             localStorage.removeItem("token");
             return {
                 ...state,
-                token: null,
                 isAuthenticated: false,
                 loading: false,
                 user: null,
