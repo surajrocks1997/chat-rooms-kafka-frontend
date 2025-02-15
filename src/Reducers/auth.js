@@ -5,6 +5,7 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    REFRESH_TOKEN_SUCCESS,
     REGISTER_FAIL,
     REGISTER_SUCCESS,
     SET_AUTH_LOADING,
@@ -37,6 +38,7 @@ const auth = (state = initialState, action) => {
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
         case GOOGLE_LOGIN_SUCCESS:
+        case REFRESH_TOKEN_SUCCESS:
             localStorage.setItem("token", payload.accessToken);
             return {
                 ...state,

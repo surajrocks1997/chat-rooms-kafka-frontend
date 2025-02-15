@@ -7,6 +7,7 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    REFRESH_TOKEN_SUCCESS,
     REGISTER_FAIL,
     REGISTER_SUCCESS,
     REMOVE_SOCIAL_INFO,
@@ -150,10 +151,19 @@ export const login =
         }
     };
 
+const refreshToken = async (dispatch) => {
+    const res = await axios.get(`${AUTH_SERVER_URL}/auth/refresh`);
+    await dispatch({
+        type: REFRESH_TOKEN_SUCCESS,
+        payload: res.data,
+    });
+    return res.data.accessToken;
+};
+
 export const loadUser = () => async (dispatch) => {
     if (localStorage.token) {
         setAuthToken(localStorage.token);
-    } else return;
+    }
 
     try {
         const res = await axios.get(`${SPRING_SERVER_URL}/user`);
@@ -163,9 +173,29 @@ export const loadUser = () => async (dispatch) => {
         });
         return res;
     } catch (err) {
-        dispatch({
-            type: AUTH_ERROR,
-        });
+        if (
+            err.response &&
+            err.response.status === 401 
+        ) {
+            console.log("Token Expired. Trying to Refresh It...");
+            try {
+                await refreshToken(dispatch);
+                await dispatch(loadUser());
+            } catch (refreshError) {
+                console.error(
+                    "Error retrying request after token refresh",
+                    refreshError
+                );
+                dispatch({
+                    type: AUTH_ERROR,
+                });
+            }
+        } else {
+            console.error(err);
+            dispatch({
+                type: AUTH_ERROR,
+            });
+        }
     }
 };
 
