@@ -1,4 +1,9 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+    Navigate,
+    Route,
+    BrowserRouter as Router,
+    Routes,
+} from "react-router-dom";
 import "./App.css";
 import WelcomePage from "./Components/WelcomePage/WelcomePage";
 import ChatRoom from "./Components/ChatBox/ChatRoom";
@@ -13,6 +18,7 @@ import setAuthToken from "./utils/axiosTokenHeader";
 import NavBar from "./Components/NavBar/NavBar";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import Profile from "./Components/Profile/Profile";
+import AuthenticatedLayout from "./Components/AuthenticatedLayout/AuthenticatedLayout";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -21,7 +27,7 @@ if (localStorage.token) {
 const App = () => {
     useEffect(() => {
         store.dispatch(loadUser());
-    });
+    }, []);
 
     return (
         <div className="App">
@@ -41,18 +47,25 @@ const App = () => {
                 <NavBar />
                 <Routes>
                     <Route element={<WelcomePage />} path="/" />
-                    <Route element={<PrivateRoute />} path="/">
-                        <Route
-                            path="/profile/:profileId"
-                            element={<Profile />}
-                        />
-                        <Route path="/chatRooms" element={<ChatShowRoom />} />
-                        <Route
-                            path="/chatRooms/:chatRoom"
-                            element={<ChatRoom />}
-                        />
-                    </Route>
                     <Route element={<Insights />} path="/insights" />
+
+                    <Route element={<PrivateRoute />}>
+                        <Route element={<AuthenticatedLayout />}>
+                            <Route
+                                path="/profile/:profileId"
+                                element={<Profile />}
+                            />
+                            <Route
+                                path="/chatRooms"
+                                element={<ChatShowRoom />}
+                            />
+                            <Route
+                                path="/chatRooms/:chatRoom"
+                                element={<ChatRoom />}
+                            />
+                        </Route>
+                    </Route>
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </Router>
         </div>

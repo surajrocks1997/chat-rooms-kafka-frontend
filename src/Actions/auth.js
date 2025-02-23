@@ -173,10 +173,7 @@ export const loadUser = () => async (dispatch) => {
         });
         return res;
     } catch (err) {
-        if (
-            err.response &&
-            err.response.status === 401 
-        ) {
+        if (err.response && err.response.status === 401) {
             console.log("Token Expired. Trying to Refresh It...");
             try {
                 await refreshToken(dispatch);

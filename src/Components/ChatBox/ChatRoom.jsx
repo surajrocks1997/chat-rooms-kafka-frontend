@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ChatBox.css";
@@ -12,9 +12,14 @@ import {
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
-import InitConnectionManager from "../../config/InitConnectionManager";
-import { CHAT_MESSAGE, USER_OFFLINE, USER_ONLINE } from "../../Actions/types";
+import {
+    CHAT_MESSAGE,
+    USER_OFFLINE,
+    USER_ONLINE,
+    PRIVATE_MESSAGE,
+} from "../../Actions/types";
 import OnlineGreeDot from "../OnlineGreenDot/OnlineGreenDot";
+import { useWebSocket } from "../../config/WebSocketProvider";
 
 const ChatRoom = ({
     auth: { user, loading },
@@ -25,133 +30,124 @@ const ChatRoom = ({
     chatRooms: { isLoading, online },
     clearActiveChatRoomState,
 }) => {
-    const [stompClient, setStompClient] = useState(null);
+    const { stompClient, sendMessage } = useWebSocket();
+    const subscriptionref = useRef(null);
+    const dispatch = useDispatch();
+
     const [chatText, setChatText] = useState("");
     const { chatRoom } = useParams();
     const inputRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        let wsId = InitConnectionManager.getWSService();
-        if (wsId == null) {
-            wsId = InitConnectionManager.createWSService();
-        }
-        const stompClient = wsId.getStompClient();
-
-        if (chatRoom === null || user === null || !stompClient) {
+        if (!chatRoom || !user) {
             navigate("/chatRooms");
+            return;
         }
 
-        if (stompClient) {
-            if (stompClient.connected) {
-                setupSubscriptions(stompClient);
-            } else {
-                stompClient.connectCallback = function (frame) {
-                    setupSubscriptions(stompClient);
-                };
+        const onMessageRecieved = (payload) => {
+            console.log("FROM ON MESSAGE RECIEVED");
+            var message = JSON.parse(payload.body);
+            switch (message.messageType) {
+                case CHAT_MESSAGE:
+                    addMessage(message);
+                    break;
+                case USER_ONLINE:
+                    addUserToOnline(message.additionalData);
+                    break;
+                case USER_OFFLINE:
+                    removeUserFromOnline(message.additionalData);
+                    break;
+                case PRIVATE_MESSAGE:
+                    console.log("From PRIVATE MESSAGE");
+                    break;
+                default:
+                    console.warn("Unknown message type:", message.messageType);
             }
+        };
+
+        if (stompClient && stompClient.connected) {
+            subscriptionref.current = stompClient.subscribe(
+                `/topic/chatRoom.${chatRoom}`,
+                onMessageRecieved,
+                { id: chatRoom }
+            );
+
+            sendMessage(
+                `/app/chatRoom/${chatRoom}`,
+                {},
+                {
+                    messageType: USER_ONLINE,
+                    username: user.email,
+                    userId: user.id,
+                    chatRoomName: chatRoom,
+                }
+            );
         } else {
-            console.log("Websocket Connection hasn't been established yet");
+            console.warn("Stomp Client is not connected yet");
         }
 
-        if (inputRef !== null && inputRef.current != null) {
+        if (inputRef.current) {
             inputRef.current.focus();
         }
 
         return () => {
-            if (stompClient && stompClient.connected) {
-                stompClient.send(
-                    `/app/chatRoom/${chatRoom}`,
-                    {},
-                    JSON.stringify({
-                        messageType: USER_OFFLINE,
-                        username: user.email,
-                        userId: user.id,
-                        chatRoomName: chatRoom,
-                    })
-                );
-                stompClient.unsubscribe(chatRoom);
+            if (subscriptionref.current) {
+                subscriptionref.current.unsubscribe(chatRoom);
             }
 
-            clearActiveChatRoomState();
+            sendMessage(
+                `/app/chatRoom/${chatRoom}`,
+                {},
+                {
+                    messageType: USER_OFFLINE,
+                    username: user.email,
+                    userId: user.id,
+                    chatRoomName: chatRoom,
+                }
+            );
+
+            dispatch(clearActiveChatRoomState());
         };
-    }, []);
+    }, [stompClient, chatRoom, user, navigate, dispatch, sendMessage]);
 
-    const onMessageRecieved = (payload) => {
-        console.log("FROM ON MESSAGE RECIEVED");
-        var message = JSON.parse(payload.body);
-        if (message.messageType === CHAT_MESSAGE) {
-            addMessage(message);
-        } else if (message.messageType === USER_ONLINE) {
-            addUserToOnline(message.additionalData);
-        } else if (message.messageType === USER_OFFLINE) {
-            removeUserFromOnline(message.additionalData);
-        } else {
-            /////////////////////////////////////////////////////////
-            if (message.messageType === "PRIVATE_MESSAGE") {
-                console.log("From PRIVATE MESSAGE");
-            }
-            /////////////////////////////////////////////////////////
-            else {
-                console.warn(message);
-            }
-        }
-    };
+    //     /////////////////////////////////////////////////////////
+    //     stompClient.subscribe(
+    //         `/user/${user.email}/queue/messages`,
+    //         onMessageRecieved,
+    //         {}
+    //     );
+    //     /////////////////////////////////////////////////////////
 
-    const setupSubscriptions = (stompClient) => {
-        setStompClient(stompClient);
-        stompClient.subscribe(
-            `/topic/chatRoom.${chatRoom}`,
-            onMessageRecieved,
-            { id: chatRoom }
-        );
-        /////////////////////////////////////////////////////////
-        stompClient.subscribe(
-            `/user/${user.email}/queue/messages`,
-            onMessageRecieved,
-            {}
-        );
-        /////////////////////////////////////////////////////////
+    const handleSendMessage = () => {
+        if (!chatText.trim()) return;
 
-        stompClient.send(
+        console.log(stompClient);
+        sendMessage(
             `/app/chatRoom/${chatRoom}`,
             {},
-            JSON.stringify({
-                messageType: USER_ONLINE,
-                username: user.email,
-                userId: user.id,
-                chatRoomName: chatRoom,
-            })
-        );
-    };
-
-    const sendMessage = () => {
-        if (chatText === "") return;
-        stompClient.send(
-            `/app/chatRoom/${chatRoom}`,
-            {},
-            JSON.stringify({
+            {
                 messageType: CHAT_MESSAGE,
                 username: user.email,
                 userId: user.id,
                 chatRoomName: chatRoom,
                 message: chatText,
-            })
+            }
         );
 
-        /////////////////////////////////////////////////////////
-        stompClient.send(
-            `/app/privateMessage/jdoe@email.com`,
-            {},
-            JSON.stringify({
-                messageType: "PRIVATE_MESSAGE",
-                username: user.email,
-                // userId: user.id,
-                receiver: "jdoe@email.com",
-                message: chatText,
-            })
-        );
-        /////////////////////////////////////////////////////////
+        //     /////////////////////////////////////////////////////////
+        //     stompClient.send(
+        //         `/app/privateMessage/jdoe@email.com`,
+        //         {},
+        //         JSON.stringify({
+        //             messageType: "PRIVATE_MESSAGE",
+        //             username: user.email,
+        //             // userId: user.id,
+        //             receiver: "jdoe@email.com",
+        //             message: chatText,
+        //         })
+        //     );
+        //     /////////////////////////////////////////////////////////
 
         setChatText("");
     };
@@ -218,7 +214,7 @@ const ChatRoom = ({
                             id="send-button"
                             type="button"
                             value="Send"
-                            onClick={sendMessage}
+                            onClick={handleSendMessage}
                         />
                     </div>
                 </div>

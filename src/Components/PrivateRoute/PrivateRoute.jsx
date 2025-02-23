@@ -4,13 +4,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import Spinner from "../Spinner/Spinner";
 
 const PrivateRoute = ({ auth: { isAuthenticated, loading } }) => {
-    return isAuthenticated === null ? (
-        <Spinner />
-    ) : !loading && !isAuthenticated ? (
-        <Navigate to="/" />
-    ) : (
-        <Outlet />
-    );
+
+    if (loading) return <Spinner />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
 PrivateRoute.propTypes = {
