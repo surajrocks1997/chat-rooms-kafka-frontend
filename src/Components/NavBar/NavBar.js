@@ -149,7 +149,7 @@ const NavBar = ({
                 <Link to="/insights">Insights</Link>
             </li>
             <li>
-                <Link to={`/profile/${user.id}`}>
+                <Link to={`/profile/${user.username}`}>
                     <i className="fa-solid fa-id-badge"></i>{" "}
                     <span>Profile</span>
                 </Link>
@@ -164,23 +164,23 @@ const NavBar = ({
     );
 
     return (
-        <div className="navbar">
+        <>
             {!loading && isAuthenticated && (
-                <>
+                <div className="navbar">
                     <p>
                         <Link to="/chatRooms">
                             <i className=""></i>Welcome
                             {user === null ? (
                                 <i class="fa-solid fa-spinner fa-spin"></i>
                             ) : (
-                                ", " + user.name
+                                ", " + user.firstName
                             )}
                         </Link>
                     </p>
                     {user !== null && authLinks(user.id)}
-                </>
+                </div>
             )}
-        </div>
+        </>
     );
 };
 

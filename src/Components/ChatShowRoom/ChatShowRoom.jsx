@@ -31,16 +31,16 @@ const ChatShowRoom = ({
             InitConnectionManager.createWSService();
         }
 
-        let sseClient = InitConnectionManager.getSSEService();
-        if (sseClient == null) {
-            InitConnectionManager.createSSEService();
-            const sseData = InitConnectionManager.getSSEData();
-            fetchSSEData(sseData);
-        }
+        // let sseClient = InitConnectionManager.getSSEService();
+        // if (sseClient == null) {
+        //     InitConnectionManager.createSSEService();
+        //     const sseData = InitConnectionManager.getSSEData();
+        //     fetchSSEData(sseData);
+        // }
 
-        if (user !== null) {
-            userSocialDetailRes(user.id);
-        }
+        // if (user !== null) {
+        //     userSocialDetailRes(user.id);
+        // }
     }, [user]);
     return (
         <div className="chat-show-room">

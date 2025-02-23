@@ -19,9 +19,9 @@ const Profile = ({
     useEffect(() => {
         if (user !== null) {
             fetchUserData(profileId);
-            userSocialDetailRes(user.id);
+            // userSocialDetailRes(user.id);
         }
-    }, [profileId,user]);
+    }, [profileId, user]);
 
     const sendFR = () => {
         sendFriendRequest(profileId);
@@ -35,21 +35,25 @@ const Profile = ({
                 <div className="header-info">
                     <div className="profile-photo">
                         <img
-                            src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
-                            alt="user"
+                            src={
+                                vprofile.profilePictureUrl !== null
+                                    ? vprofile.profilePictureUrl
+                                    : "https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
+                            }
+                            alt="User Profile"
                             style={{
                                 width: "150px",
                                 display: "block",
-                                // borderRadius: "20px",
+                                borderRadius: "50%",
                                 margin: "0 7px",
                             }}
                         ></img>
                     </div>
                     <div className="profile-name">
-                        <p>{vprofile.name}</p>
+                        <p>{vprofile.firstName + " " + vprofile.lastName} </p>
                     </div>
                 </div>
-                {frPending.some((ele) => ele.id === Number(profileId)) ? (
+                {frPending.some((ele) => ele.id === Number(vprofile.id)) ? (
                     <div className="header-section">
                         <button
                             className="btn btn-success"
