@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, {
     createContext,
     useContext,
@@ -6,14 +7,23 @@ import React, {
     useCallback,
     useState,
 } from "react";
+import { connect } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import {
+    setWebSocketConnectAlert,
+    setWebSocketErrorAlert,
+} from "../Actions/alert";
 
 const WebSocketContext = createContext(null);
 
 export const useWebSocket = () => useContext(WebSocketContext);
 
-export const WebSocketProvider = ({ children }) => {
+const WebSocketProvider = ({
+    children,
+    setWebSocketConnectAlert,
+    setWebSocketErrorAlert,
+}) => {
     const [stompClient, setStompClient] = useState(null);
     const reconnectAttemptRef = useRef(0);
     // const maxReconnectAttemps = 5;
@@ -39,28 +49,21 @@ export const WebSocketProvider = ({ children }) => {
                 reconnectAttemptRef.current = 0;
                 isConnectingRef.current = false;
                 setStompClient(client);
+                setWebSocketConnectAlert("You are Online!", "success");
             },
             (error) => {
                 console.error("Websocket Connection Error: ", error);
                 console.log(new Date());
                 isConnectingRef.current = false;
 
+                setWebSocketErrorAlert(
+                    "Disconnected from Server. Trying to Connect...",
+                    "danger"
+                );
                 setTimeout(() => {
                     reconnectAttemptRef.current += 1;
                     connect();
                 }, 3 * 1000);
-
-                // if (reconnectAttemptRef.current < maxReconnectAttemps) {
-                //     const timeout = Math.pow(2, reconnectAttemptRef.current) * 1000;
-                //     setTimeout(() => {
-                //         reconnectAttemptRef.current += 1;
-                //         connect();
-                //     }, timeout);
-                // } else {
-                //     console.error(
-                //         "Max Reconnection Attempts Reached. Please Try Refreshing the Page"
-                //     );
-                // }
             }
         );
     }, []);
@@ -95,3 +98,17 @@ export const WebSocketProvider = ({ children }) => {
         </WebSocketContext.Provider>
     );
 };
+
+WebSocketProvider.propTypes = {
+    setWebSocketConnectAlert: PropTypes.func,
+    setWebSocketErrorAlert: PropTypes.func,
+};
+
+const mapStateToProps = (state) => ({
+    alert: state.alert,
+});
+
+export default connect(mapStateToProps, {
+    setWebSocketConnectAlert,
+    setWebSocketErrorAlert,
+})(WebSocketProvider);

@@ -27,6 +27,28 @@
     outline: none;
 }
 
+.alerts-container {
+    position: fixed;
+    top: var(--navBar-height);
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    /* border: solid 2px red; */
+}
+
+.alert {
+    max-width: 300px;
+    width: auto;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    opacity: 0.9;
+    background: var(--light-color);
+    color: #333;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 .btn-primary,
 .bg-primary,
 .badge-primary,

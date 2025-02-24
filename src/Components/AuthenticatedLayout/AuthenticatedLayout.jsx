@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { WebSocketProvider } from "../../config/WebSocketProvider";
+import WebSocketProvider from "../../config/WebSocketProvider";
 
 const AuthenticatedLayout = () => {
     return (

@@ -15,10 +15,11 @@ import { useEffect } from "react";
 import store from "./Store/store";
 import { loadUser } from "./Actions/auth";
 import setAuthToken from "./utils/axiosTokenHeader";
-import NavBar from "./Components/NavBar/NavBar";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import Profile from "./Components/Profile/Profile";
 import AuthenticatedLayout from "./Components/AuthenticatedLayout/AuthenticatedLayout";
+import NavBar from "./Components/Layout/NavBar/NavBar";
+import Alert from "./Components/Layout/Alert";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -45,6 +46,7 @@ const App = () => {
                     theme="dark"
                 />
                 <NavBar />
+                <Alert />
                 <Routes>
                     <Route element={<WelcomePage />} path="/" />
                     <Route element={<Insights />} path="/insights" />

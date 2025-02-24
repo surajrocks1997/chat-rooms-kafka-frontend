@@ -15,9 +15,7 @@ import {
     USER_LOADED,
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
-import { toast } from "react-toastify";
 import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
-import auth from "../Reducers/auth";
 
 export const setAuthLoading = (isLoading) => (dispatch) => {
     dispatch({
