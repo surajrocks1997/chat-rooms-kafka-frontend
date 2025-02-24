@@ -15,9 +15,7 @@ import {
     USER_LOADED,
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
-import { toast } from "react-toastify";
 import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
-import auth from "../Reducers/auth";
 
 export const setAuthLoading = (isLoading) => (dispatch) => {
     dispatch({
@@ -163,39 +161,38 @@ const refreshToken = async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
     if (localStorage.token) {
         setAuthToken(localStorage.token);
-    }
-
-    try {
-        const res = await axios.get(`${SPRING_SERVER_URL}/user`);
-        await dispatch({
-            type: USER_LOADED,
-            payload: res.data,
-        });
-        return res;
-    } catch (err) {
-        if (
-            err.response &&
-            err.response.status === 401 
-        ) {
-            console.log("Token Expired. Trying to Refresh It...");
-            try {
-                await refreshToken(dispatch);
-                await dispatch(loadUser());
-            } catch (refreshError) {
-                console.error(
-                    "Error retrying request after token refresh",
-                    refreshError
-                );
+        try {
+            const res = await axios.get(`${SPRING_SERVER_URL}/user`);
+            await dispatch({
+                type: USER_LOADED,
+                payload: res.data,
+            });
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                console.log("Token Expired. Trying to Refresh It...");
+                try {
+                    await refreshToken(dispatch);
+                    await dispatch(loadUser());
+                } catch (refreshError) {
+                    console.error(
+                        "Error retrying request after token refresh",
+                        refreshError
+                    );
+                    dispatch({
+                        type: AUTH_ERROR,
+                    });
+                }
+            } else {
+                console.error(err);
                 dispatch({
                     type: AUTH_ERROR,
                 });
             }
-        } else {
-            console.error(err);
-            dispatch({
-                type: AUTH_ERROR,
-            });
         }
+    } else {
+        dispatch({
+            type: AUTH_ERROR,
+        });
     }
 };
 
