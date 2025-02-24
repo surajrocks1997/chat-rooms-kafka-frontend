@@ -2,6 +2,7 @@ import {
     FRIEND_REQUEST_SENT,
     GET_SOCIAL_INFO,
     POPULATE_VISITED_PROFILE,
+    REMOVE_SOCIAL_INFO,
 } from "../Actions/types";
 
 const initialState = {
@@ -34,6 +35,8 @@ const socialInfo = (state = initialState, action) => {
                 ...state,
                 frSent: [...state.frSent, payload],
             };
+        case REMOVE_SOCIAL_INFO:
+            return initialState;
         default:
             return state;
     }

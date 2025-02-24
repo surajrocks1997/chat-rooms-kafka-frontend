@@ -9,15 +9,15 @@ export default class WebSocketService {
     }
 
     initWebSocket() {
-        const jwt = localStorage.token;
+        const token = localStorage.token;
         console.log("From WebSocketService Class");
         const socket = new SockJS(
-            "http://localhost:8080/chat-rooms"
+            "http://localhost:8082/chat-rooms"
         );
         this.stompClient = Stomp.over(socket);
         this.stompClient.connect(
             {
-                token: jwt,
+                Authorization: "Bearer " + token,
             },
             (frame) => {
                 console.log("Connected to WebSocket Server");

@@ -2,16 +2,19 @@ import axios from "axios";
 import {
     AUTH_ERROR,
     CLEAR_PROFILE,
+    GOOGLE_LOGIN_FAIL,
+    GOOGLE_LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    REFRESH_TOKEN_SUCCESS,
     REGISTER_FAIL,
     REGISTER_SUCCESS,
+    REMOVE_SOCIAL_INFO,
     SET_AUTH_LOADING,
     USER_LOADED,
 } from "./types";
 import setAuthToken from "../utils/axiosTokenHeader";
-import { toast } from "react-toastify";
 import { AUTH_SERVER_URL, SPRING_SERVER_URL } from "../config/uri";
 
 export const setAuthLoading = (isLoading) => (dispatch) => {
@@ -19,6 +22,33 @@ export const setAuthLoading = (isLoading) => (dispatch) => {
         type: SET_AUTH_LOADING,
         payload: isLoading,
     });
+};
+
+export const googleAuth = (authCode) => async (dispatch) => {
+    dispatch(setAuthLoading(true));
+    try {
+        const config = {
+            headers: {
+                authCode: authCode,
+            },
+        };
+        const res = await axios.get(
+            `${AUTH_SERVER_URL}/google/auth/token`,
+            config
+        );
+
+        await dispatch({
+            type: GOOGLE_LOGIN_SUCCESS,
+            payload: res.data,
+        });
+
+        await dispatch(loadUser());
+    } catch (err) {
+        console.log(err);
+        dispatch({
+            type: GOOGLE_LOGIN_FAIL,
+        });
+    }
 };
 
 export const signUp =
@@ -44,15 +74,15 @@ export const signUp =
                 config
             );
 
-            await axios.post(
-                SPRING_SERVER_URL + "/initUserSocialDetails",
-                res.data,
-                {
-                    headers: {
-                        "x-auth-token": res.data.token,
-                    },
-                }
-            );
+            // await axios.post(
+            //     SPRING_SERVER_URL + "/initUserSocialDetails",
+            //     res.data,
+            //     {
+            //         headers: {
+            //             "x-auth-token": res.data.token,
+            //         },
+            //     }
+            // );
 
             await dispatch({
                 type: REGISTER_SUCCESS,
@@ -61,13 +91,14 @@ export const signUp =
 
             await dispatch(loadUser());
         } catch (err) {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach((error) => {
-                    console.log(error.msg);
-                    toast.error(error.msg);
-                });
-            }
+            console.log(err);
+            // const errors = err.response.data.errors;
+            // if (errors) {
+            //     errors.forEach((error) => {
+            //         console.log(error.msg);
+            //         toast.error(error.msg);
+            //     });
+            // }
 
             dispatch({
                 type: REGISTER_FAIL,
@@ -104,13 +135,13 @@ export const login =
             await dispatch(loadUser());
         } catch (err) {
             console.error(err);
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach((error) => {
-                    console.log(error.msg);
-                    toast.error(error.msg);
-                });
-            }
+            // const errors = err.response.data.errors;
+            // if (errors) {
+            //     errors.forEach((error) => {
+            //         console.log(error.msg);
+            //         toast.error(error.msg);
+            //     });
+            // }
 
             dispatch({
                 type: LOGIN_FAIL,
@@ -118,19 +149,47 @@ export const login =
         }
     };
 
+const refreshToken = async (dispatch) => {
+    const res = await axios.get(`${AUTH_SERVER_URL}/auth/refresh`);
+    await dispatch({
+        type: REFRESH_TOKEN_SUCCESS,
+        payload: res.data,
+    });
+    return res.data.accessToken;
+};
+
 export const loadUser = () => async (dispatch) => {
     if (localStorage.token) {
         setAuthToken(localStorage.token);
-    }
-
-    try {
-        const res = await axios.get(`${AUTH_SERVER_URL}/auth`);
-        await dispatch({
-            type: USER_LOADED,
-            payload: res.data,
-        });
-        return res;
-    } catch (err) {
+        try {
+            const res = await axios.get(`${SPRING_SERVER_URL}/user`);
+            await dispatch({
+                type: USER_LOADED,
+                payload: res.data,
+            });
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                console.log("Token Expired. Trying to Refresh It...");
+                try {
+                    await refreshToken(dispatch);
+                    await dispatch(loadUser());
+                } catch (refreshError) {
+                    console.error(
+                        "Error retrying request after token refresh",
+                        refreshError
+                    );
+                    dispatch({
+                        type: AUTH_ERROR,
+                    });
+                }
+            } else {
+                console.error(err);
+                dispatch({
+                    type: AUTH_ERROR,
+                });
+            }
+        }
+    } else {
         dispatch({
             type: AUTH_ERROR,
         });
@@ -140,5 +199,9 @@ export const loadUser = () => async (dispatch) => {
 export const logout = () => (dispatch) => {
     dispatch({
         type: LOGOUT,
+    });
+
+    dispatch({
+        type: REMOVE_SOCIAL_INFO,
     });
 };

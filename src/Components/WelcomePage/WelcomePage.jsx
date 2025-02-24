@@ -2,11 +2,18 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signUp, login } from "../../Actions/auth";
+import { signUp, login, googleAuth } from "../../Actions/auth";
 import "./WelcomePage.css";
 import { generateToastifyError } from "../../Actions/toastify";
+import { useGoogleLogin } from "@react-oauth/google";
+import Spinner from "../Spinner/Spinner";
 
-const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
+const WelcomePage = ({
+    signUp,
+    googleAuth,
+    login,
+    auth: { isAuthenticated, loading },
+}) => {
     const navigate = useNavigate();
 
     const [activeForm, setActiveForm] = useState(0);
@@ -55,18 +62,30 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
         }
     };
 
+    const initiateGoogleLogin = useGoogleLogin({
+        onSuccess: (res) => {
+            console.log(res);
+            googleAuth(res.code);
+        },
+        onError: (errorResponse) => console.log(errorResponse),
+        flow: "auth-code",
+        ux_mode: "popup",
+    });
+
     useEffect(() => {
         if (!loading && isAuthenticated) {
             navigate("/chatRooms");
         }
     });
 
-    return (
+    return loading ? (
+        <Spinner />
+    ) : (
         <section className="landing">
             <div className="welcome-page">
                 <div className="background"></div>
                 <div className="content">
-                    <div className="title">Welcome to Chat Rooms!!</div>
+                    <div className="title">Welcome</div>
                     <br />
                     <div className="form">
                         {activeForm === 0 && (
@@ -169,10 +188,16 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
                             onClick={() =>
                                 setActiveForm(activeForm === 1 ? 0 : 1)
                             }
-                        />
-                        {loading && (
-                            <i className="fa-solid fa-spinner fa-spin"></i>
-                        )}
+                        ></input>
+
+                        <div className="external-logins">
+                            <p>or you can sign in with:</p>
+                            <i
+                                className="fa-brands fa-google fa-lg"
+                                onClick={() => initiateGoogleLogin()}
+                            ></i>
+                            <i className="fa-brands fa-facebook-f fa-lg"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,6 +208,7 @@ const WelcomePage = ({ signUp, login, auth: { isAuthenticated, loading } }) => {
 WelcomePage.propTypes = {
     signUp: PropTypes.func,
     login: PropTypes.func,
+    googleAuth: PropTypes.func,
     isAuthenticated: PropTypes.bool,
 };
 
@@ -193,4 +219,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     signUp,
     login,
+    googleAuth,
 })(WelcomePage);

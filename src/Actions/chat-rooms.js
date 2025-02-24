@@ -66,9 +66,7 @@ export const setRequiredChatState = (roomName) => (dispatch) => {
     );
 };
 
-export const clearActiveChatRoomState = () => (dispatch) => {
-    dispatch({
-        type: CLEAR_CHAT_ROOM,
-        payload: null,
-    });
-};
+export const clearActiveChatRoomState = () => ({
+    type: CLEAR_CHAT_ROOM,
+    payload: null,
+});

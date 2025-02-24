@@ -20,11 +20,12 @@
     opacity: 0.9;
 }
 */
-.content{
+.content {
     /* z-index: 1; */
     padding: 20px;
     border-radius: 10px;
     background-color: whitesmoke;
+    width: 400px;
 }
 
 .title {
@@ -34,16 +35,50 @@
     color: black;
 }
 
-.login-form{
+.login-form {
     display: flex;
     flex-direction: column;
 }
 
-.signup-form{
+.signup-form {
     display: flex;
     flex-direction: column;
 }
 
-.btn{
+.btn {
     width: 100%;
+}
+
+.external-logins {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.external-logins i.fa-google:hover {
+    cursor: pointer;
+    opacity: 1;
+    color: #db4437;
+}
+
+.external-logins i.fa-facebook-f:hover {
+    cursor: pointer;
+    opacity: 1;
+    color: #3b5998;
+}
+
+p {
+    color: rgb(178, 178, 178);
+}
+
+.i-circle-background {
+    background-color: black;
+}
+
+i {
+    margin: 0 10px;
+    opacity: 0.5;
+}
+
+.spinner {
+    text-align: center;
 }

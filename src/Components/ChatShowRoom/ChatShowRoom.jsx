@@ -25,23 +25,18 @@ const ChatShowRoom = ({
         "Random",
     ];
 
-    useEffect(() => {
-        let stompClient = InitConnectionManager.getWSService();
-        if (stompClient == null) {
-            InitConnectionManager.createWSService();
-        }
+    // useEffect(() => {
+    //     // if (!user) {
+    //     //     userSocialDetailRes(user.id);
+    //     // }
+    // }, []);
 
-        let sseClient = InitConnectionManager.getSSEService();
-        if (sseClient == null) {
-            InitConnectionManager.createSSEService();
-            const sseData = InitConnectionManager.getSSEData();
-            fetchSSEData(sseData);
-        }
-
-        if (user !== null) {
-            userSocialDetailRes(user.id);
-        }
-    }, [user]);
+    const selectChatRoom = (topic) => {
+        setActiveChatRoom(topic);
+        navigate(`/chatRooms/${topic}`, {
+            state: { topicName: topic },
+        });
+    };
     return (
         <div className="chat-show-room">
             <p>Select a Chat Room Topic you wish to chat on.</p>
@@ -51,10 +46,7 @@ const ChatShowRoom = ({
                         className="grid-item"
                         key={index}
                         onClick={(e) => {
-                            setActiveChatRoom(topic);
-                            navigate(`/chatRooms/${topic}`, {
-                                state: { topicName: topic },
-                            });
+                            selectChatRoom(topic);
                         }}
                     >
                         {topic}
