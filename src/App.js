@@ -45,7 +45,6 @@ const App = () => {
                     pauseOnHover
                     theme="dark"
                 />
-                <NavBar />
                 <Alert />
                 <Routes>
                     <Route element={<WelcomePage />} path="/" />
