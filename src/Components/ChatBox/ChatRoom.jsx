@@ -46,23 +46,22 @@ const ChatRoom = ({
         }
 
         const onMessageRecieved = (payload) => {
-            console.log("FROM ON MESSAGE RECIEVED");
             var message = JSON.parse(payload.body);
             switch (message.messageType) {
                 case CHAT_MESSAGE:
                     addMessage(message);
                     break;
                 case USER_ONLINE:
-                    addUserToOnline(message.additionalData);
+                    addUserToOnline(message.username);
                     break;
                 case USER_OFFLINE:
-                    removeUserFromOnline(message.additionalData);
+                    removeUserFromOnline(message.username);
                     break;
                 case PRIVATE_MESSAGE:
                     console.log("From PRIVATE MESSAGE");
                     break;
                 default:
-                    console.warn("Unknown message type:", message.messageType);
+                    console.warn("Unknown message type:", message);
             }
         };
 
@@ -107,9 +106,9 @@ const ChatRoom = ({
                 }
             );
 
-            dispatch(clearActiveChatRoomState());
+            clearActiveChatRoomState();
         };
-    }, [stompClient, chatRoom, user, navigate, dispatch, sendMessage]);
+    }, [stompClient, chatRoom, navigate, user]);
 
     //     /////////////////////////////////////////////////////////
     //     stompClient.subscribe(
@@ -121,8 +120,6 @@ const ChatRoom = ({
 
     const handleSendMessage = () => {
         if (!chatText.trim()) return;
-
-        console.log(stompClient);
         sendMessage(
             `/app/chatRoom/${chatRoom}`,
             {},
@@ -167,10 +164,10 @@ const ChatRoom = ({
             <div className="left-container">
                 <div className="room-list">
                     <p>Online</p>
-                    {online.map((user, index) => (
+                    {Array.isArray(online) && online.map((user, index) => (
                         <div className="online-presence" key={index}>
                             <OnlineGreeDot />
-                            <p>{user}</p>
+                            <>{user}</>
                         </div>
                     ))}
                 </div>

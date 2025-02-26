@@ -36,7 +36,7 @@ const chatRooms = (state = initState, action) => {
         case ADD_TO_ONLINE_LIST:
             return {
                 ...state,
-                online: payload,
+                online: [payload, ...state.online]
             };
         case REMOVE_FROM_ONLINE_LIST:
             return {

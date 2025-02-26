@@ -9,7 +9,7 @@ import {
 
 export const addMessage = (message) => (dispatch) => {
     const { messageType, chatRoomName, ...rest } = message;
-    const datetime = new Date(parseInt(rest.timestamp));
+    const datetime = new Date();
     let options = {
         hour: "2-digit",
         minute: "2-digit",
@@ -26,10 +26,10 @@ export const addMessage = (message) => (dispatch) => {
     });
 };
 
-export const addUserToOnline = (arrOfEmails) => (dispatch) => {
+export const addUserToOnline = (email) => (dispatch) => {
     dispatch({
         type: ADD_TO_ONLINE_LIST,
-        payload: arrOfEmails,
+        payload: email,
     });
 };
 
