@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
     ADD_MESSAGE,
     ADD_TO_ONLINE_LIST,
@@ -6,6 +7,7 @@ import {
     REMOVE_FROM_ONLINE_LIST,
     SET_ACTIVE_CHAT_ROOM,
 } from "./types";
+import { SPRING_SERVER_URL } from "../config/uri";
 
 export const addMessage = (message) => (dispatch) => {
     const { messageType, chatRoomName, ...rest } = message;
@@ -26,6 +28,20 @@ export const addMessage = (message) => (dispatch) => {
     });
 };
 
+export const fetchAllOnline = (chatRoom) => async (dispatch) => {
+    try {
+        const res = await axios.get(
+            `${SPRING_SERVER_URL}/user/chatRooms/${chatRoom}/online`
+        );
+        dispatch({
+            type: ADD_TO_ONLINE_LIST,
+            payload: res.data,
+        });
+    } catch (error) {
+        console.error("Error fetching online users:", error);
+    }
+};
+
 export const addUserToOnline = (email) => (dispatch) => {
     dispatch({
         type: ADD_TO_ONLINE_LIST,
@@ -33,10 +49,10 @@ export const addUserToOnline = (email) => (dispatch) => {
     });
 };
 
-export const removeUserFromOnline = (arrOfEmails) => (dispatch) => {
+export const removeUserFromOnline = (email) => (dispatch) => {
     dispatch({
         type: REMOVE_FROM_ONLINE_LIST,
-        payload: arrOfEmails,
+        payload: email,
     });
 };
 
@@ -55,7 +71,7 @@ export const setRequiredChatState = (roomName) => (dispatch) => {
         type: LOADING_CHAT_ROOM,
         payload: true,
     });
-    // fetch 40 messages from databased with this roomName
+    // fetch 40 messages from database with this roomName
     setTimeout(
         () =>
             dispatch({
