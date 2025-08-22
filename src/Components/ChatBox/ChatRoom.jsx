@@ -8,7 +8,6 @@ import {
     addUserToOnline,
     removeUserFromOnline,
     clearActiveChatRoomState,
-    setRequiredChatState,
     fetchAllOnline,
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
@@ -34,7 +33,6 @@ const ChatRoom = ({
 }) => {
     const { stompClient, sendMessage } = useWebSocket();
     const subscriptionref = useRef(null);
-    const dispatch = useDispatch();
 
     const [chatText, setChatText] = useState("");
     const { chatRoom } = useParams();

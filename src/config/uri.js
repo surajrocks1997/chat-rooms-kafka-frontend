@@ -1,2 +1,3 @@
-export const AUTH_SERVER_URL = "http://localhost:8081/api";
-export const SPRING_SERVER_URL = "http://localhost:8082/api";
+export const AUTH_SERVER_URL = process.env.REACT_APP_AUTH_SERVER_URL;
+export const SPRING_SERVER_URL = process.env.REACT_APP_WS_PRODUCER_SERVER_URL;
+export const WEBSOCKET_CONNECTION_URL = process.env.REACT_APP_WEBSOCKET_CONNECTION_URL;
