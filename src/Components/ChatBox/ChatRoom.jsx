@@ -8,7 +8,7 @@ import {
     addUserToOnline,
     removeUserFromOnline,
     clearActiveChatRoomState,
-    setRequiredChatState,
+    fetchAllOnline,
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
@@ -29,10 +29,10 @@ const ChatRoom = ({
     removeUserFromOnline,
     chatRooms: { isLoading, online },
     clearActiveChatRoomState,
+    fetchAllOnline,
 }) => {
     const { stompClient, sendMessage } = useWebSocket();
     const subscriptionref = useRef(null);
-    const dispatch = useDispatch();
 
     const [chatText, setChatText] = useState("");
     const { chatRoom } = useParams();
@@ -46,23 +46,24 @@ const ChatRoom = ({
         }
 
         const onMessageRecieved = (payload) => {
-            console.log("FROM ON MESSAGE RECIEVED");
             var message = JSON.parse(payload.body);
             switch (message.messageType) {
                 case CHAT_MESSAGE:
                     addMessage(message);
                     break;
                 case USER_ONLINE:
-                    addUserToOnline(message.additionalData);
+                    if (user.email === message.username)
+                        fetchAllOnline(chatRoom);
+                    else addUserToOnline(message.username);
                     break;
                 case USER_OFFLINE:
-                    removeUserFromOnline(message.additionalData);
+                    removeUserFromOnline(message.username);
                     break;
                 case PRIVATE_MESSAGE:
                     console.log("From PRIVATE MESSAGE");
                     break;
                 default:
-                    console.warn("Unknown message type:", message.messageType);
+                    console.warn("Unknown message type:", message);
             }
         };
 
@@ -71,17 +72,6 @@ const ChatRoom = ({
                 `/topic/chatRoom.${chatRoom}`,
                 onMessageRecieved,
                 { id: chatRoom }
-            );
-
-            sendMessage(
-                `/app/chatRoom/${chatRoom}`,
-                {},
-                {
-                    messageType: USER_ONLINE,
-                    username: user.email,
-                    userId: user.id,
-                    chatRoomName: chatRoom,
-                }
             );
         } else {
             console.warn("Stomp Client is not connected yet");
@@ -95,34 +85,12 @@ const ChatRoom = ({
             if (subscriptionref.current) {
                 subscriptionref.current.unsubscribe(chatRoom);
             }
-
-            sendMessage(
-                `/app/chatRoom/${chatRoom}`,
-                {},
-                {
-                    messageType: USER_OFFLINE,
-                    username: user.email,
-                    userId: user.id,
-                    chatRoomName: chatRoom,
-                }
-            );
-
-            dispatch(clearActiveChatRoomState());
+            clearActiveChatRoomState();
         };
-    }, [stompClient, chatRoom, user, navigate, dispatch, sendMessage]);
-
-    //     /////////////////////////////////////////////////////////
-    //     stompClient.subscribe(
-    //         `/user/${user.email}/queue/messages`,
-    //         onMessageRecieved,
-    //         {}
-    //     );
-    //     /////////////////////////////////////////////////////////
+    }, [stompClient, chatRoom, navigate, user]);
 
     const handleSendMessage = () => {
         if (!chatText.trim()) return;
-
-        console.log(stompClient);
         sendMessage(
             `/app/chatRoom/${chatRoom}`,
             {},
@@ -167,12 +135,13 @@ const ChatRoom = ({
             <div className="left-container">
                 <div className="room-list">
                     <p>Online</p>
-                    {online.map((user, index) => (
-                        <div className="online-presence" key={index}>
-                            <OnlineGreeDot />
-                            <p>{user}</p>
-                        </div>
-                    ))}
+                    {Array.isArray(online) &&
+                        online.map((user, index) => (
+                            <div className="online-presence" key={index}>
+                                <OnlineGreeDot />
+                                <>{user}</>
+                            </div>
+                        ))}
                 </div>
                 <div className="room-insight">
                     <p>Total Online: {online.length}</p>
@@ -232,6 +201,7 @@ ChatRoom.propTypes = {
     removeUserFromOnline: PropTypes.func.isRequired,
     perChatRoomData: PropTypes.array,
     user: PropTypes.object,
+    fetchAllOnline: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -245,4 +215,5 @@ export default connect(mapStateToProps, {
     clearActiveChatRoomState,
     addUserToOnline,
     removeUserFromOnline,
+    fetchAllOnline,
 })(ChatRoom);

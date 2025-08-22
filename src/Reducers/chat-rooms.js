@@ -36,12 +36,15 @@ const chatRooms = (state = initState, action) => {
         case ADD_TO_ONLINE_LIST:
             return {
                 ...state,
-                online: payload,
+                online:
+                    state.online.length === 0
+                        ? payload
+                        : [payload, ...state.online],
             };
         case REMOVE_FROM_ONLINE_LIST:
             return {
                 ...state,
-                online: payload,
+                online: state.online.filter((value) => value !== payload),
             };
         case CLEAR_CHAT_ROOM:
             return {

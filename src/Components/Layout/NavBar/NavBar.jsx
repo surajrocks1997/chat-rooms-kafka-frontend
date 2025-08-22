@@ -77,7 +77,7 @@ const NavBar = ({
                 >
                     <Link>
                         <i
-                            class="fa-solid fa-user"
+                            className="fa-solid fa-user"
                             style={{ color: "#ffffff" }}
                         ></i>
                     </Link>
@@ -98,7 +98,7 @@ const NavBar = ({
                 >
                     <Link>
                         <i
-                            class="fa-regular fa-message"
+                            className="fa-regular fa-message"
                             style={{ color: "#ffffff" }}
                         ></i>
                     </Link>

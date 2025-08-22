@@ -14,6 +14,7 @@ import {
     setWebSocketConnectAlert,
     setWebSocketErrorAlert,
 } from "../Actions/alert";
+import { WEBSOCKET_CONNECTION_URL } from "./uri";
 
 const WebSocketContext = createContext(null);
 
@@ -34,7 +35,7 @@ const WebSocketProvider = ({
         isConnectingRef.current = true;
         const token = localStorage.getItem("token");
 
-        const socket = new SockJS("http://localhost:8082/chat-rooms");
+        const socket = new SockJS(WEBSOCKET_CONNECTION_URL);
 
         let client = Stomp.over(socket);
 

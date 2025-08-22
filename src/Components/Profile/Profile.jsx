@@ -82,7 +82,7 @@ const Profile = ({
                                 {frSent.includes(profileId) ? (
                                     <>
                                         <span>Friend Request Sent </span>
-                                        <i class="fa-solid fa-check"></i>
+                                        <i className="fa-solid fa-check"></i>
                                     </>
                                 ) : (
                                     "Send Friend Request"
