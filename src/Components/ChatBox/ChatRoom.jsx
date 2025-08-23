@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./ChatBox.css";
 import {
     addMessage,
@@ -9,6 +9,7 @@ import {
     removeUserFromOnline,
     clearActiveChatRoomState,
     fetchAllOnline,
+    setChatLoading,
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
@@ -30,6 +31,7 @@ const ChatRoom = ({
     chatRooms: { isLoading, online },
     clearActiveChatRoomState,
     fetchAllOnline,
+    setChatLoading,
 }) => {
     const { stompClient, sendMessage } = useWebSocket();
     const subscriptionref = useRef(null);
@@ -38,9 +40,12 @@ const ChatRoom = ({
     const { chatRoom } = useParams();
     const inputRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const { topicName } = location.state || {};
 
     useEffect(() => {
-        if (!chatRoom || !user) {
+        if (!chatRoom || !user || !topicName) {
             navigate("/chatRooms");
             return;
         }
@@ -73,6 +78,7 @@ const ChatRoom = ({
                 onMessageRecieved,
                 { id: chatRoom }
             );
+            setChatLoading(true);
         } else {
             console.warn("Stomp Client is not connected yet");
         }
@@ -202,6 +208,7 @@ ChatRoom.propTypes = {
     perChatRoomData: PropTypes.array,
     user: PropTypes.object,
     fetchAllOnline: PropTypes.func.isRequired,
+    setChatLoading: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -216,4 +223,5 @@ export default connect(mapStateToProps, {
     addUserToOnline,
     removeUserFromOnline,
     fetchAllOnline,
+    setChatLoading,
 })(ChatRoom);

@@ -6,8 +6,16 @@ import {
     LOADING_CHAT_ROOM,
     REMOVE_FROM_ONLINE_LIST,
     SET_ACTIVE_CHAT_ROOM,
+    SET_CHAT_LOADING,
 } from "./types";
 import { SPRING_SERVER_URL } from "../config/uri";
+
+export const setChatLoading = (isLoading) => (dispatch) => {
+    dispatch({
+        type: SET_CHAT_LOADING,
+        payload: isLoading,
+    });
+};
 
 export const addMessage = (message) => (dispatch) => {
     const { messageType, chatRoomName, ...rest } = message;
@@ -37,6 +45,7 @@ export const fetchAllOnline = (chatRoom) => async (dispatch) => {
             type: ADD_TO_ONLINE_LIST,
             payload: res.data,
         });
+        dispatch(setChatLoading(false));
     } catch (error) {
         console.error("Error fetching online users:", error);
     }

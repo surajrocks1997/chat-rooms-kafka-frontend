@@ -1,7 +1,7 @@
 .spinner {
     height: calc(100vh - var(--navBar-height));
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     justify-self: center;
     align-items: center;
     /* border: solid red 1px; */

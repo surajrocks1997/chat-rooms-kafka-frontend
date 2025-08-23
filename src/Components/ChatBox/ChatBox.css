@@ -66,7 +66,7 @@
     flex: 5;
     width: 100%;
     flex-direction: column;
-    height: calc(100vh - 70px);
+    height: calc(100vh - var(--navBar-height));
     /* border: 2px dashed red; */
     max-width: 1200px;
 }
@@ -92,6 +92,12 @@
 .input-container input:last-child {
     border-radius: 20px;
     width: 10%;
+}
+
+.chat-spinner{
+    display: flex;
+    justify-content: center;
+    height: 89%;
 }
 
 .chat-page {

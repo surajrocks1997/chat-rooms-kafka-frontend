@@ -5,6 +5,7 @@ import {
     SET_ACTIVE_CHAT_ROOM,
     ADD_TO_ONLINE_LIST,
     REMOVE_FROM_ONLINE_LIST,
+    SET_CHAT_LOADING,
 } from "../Actions/types";
 
 const initState = {
@@ -18,6 +19,11 @@ const chatRooms = (state = initState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case SET_CHAT_LOADING:
+            return {
+                ...state,
+                isLoading: payload,
+            };
         case LOADING_CHAT_ROOM:
             return {
                 ...state,

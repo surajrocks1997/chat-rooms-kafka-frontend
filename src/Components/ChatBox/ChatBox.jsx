@@ -1,9 +1,10 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../Spinner/Spinner";
 
 const ChatBox = ({
-    chatRooms: { messages },
+    chatRooms: { messages, isLoading },
     auth: {
         user: { email },
     },
@@ -14,7 +15,11 @@ const ChatBox = ({
         navigate(`/profile/${id}`);
     };
 
-    return (
+    return isLoading ? (
+        <div className="chat-spinner">
+            <Spinner />
+        </div>
+    ) : (
         <div className="chat-page">
             {messages.map((message, index) => (
                 <div
@@ -29,7 +34,7 @@ const ChatBox = ({
                     <div className="user-image">
                         <img
                             src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"
-                            alt="user image"
+                            alt="user"
                             style={{
                                 width: "40px",
                                 display: "block",
@@ -68,6 +73,7 @@ const ChatBox = ({
 ChatBox.propTypes = {
     activeChatRoom: PropTypes.string,
     chatRoomDetails: PropTypes.object,
+    isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
