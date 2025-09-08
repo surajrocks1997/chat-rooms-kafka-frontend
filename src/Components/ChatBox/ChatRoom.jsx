@@ -57,7 +57,7 @@ const ChatRoom = ({
                     addMessage(message);
                     break;
                 case USER_ONLINE:
-                    if (user.email === message.username)
+                    if (user.username === message.username)
                         fetchAllOnline(chatRoom);
                     else addUserToOnline(message.username);
                     break;
@@ -102,7 +102,7 @@ const ChatRoom = ({
             {},
             {
                 messageType: CHAT_MESSAGE,
-                username: user.email,
+                username: user.username,
                 userId: user.id,
                 chatRoomName: chatRoom,
                 message: chatText,

@@ -74,7 +74,7 @@ const WelcomePage = ({
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            navigate("/chatRooms");
+            navigate("/home");
         }
     });
 

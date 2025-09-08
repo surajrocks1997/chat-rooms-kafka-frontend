@@ -39,7 +39,6 @@ const ChatShowRoom = ({
     };
     return (
         <div className="chat-show-room">
-            <p>Select a Chat Room Topic you wish to chat on.</p>
             <div className="grid-container">
                 {chatRoomTopics.map((topic, index) => (
                     <div
@@ -49,7 +48,12 @@ const ChatShowRoom = ({
                             selectChatRoom(topic);
                         }}
                     >
-                        {topic}
+                        <div className="topic">
+                            <div className="title-name">{topic}</div>
+                        </div>
+                        <div className="insights">
+                            <div className="insight-info">1 Online</div>
+                        </div>
                     </div>
                 ))}
             </div>

@@ -137,7 +137,7 @@ const NavBar = ({
         isAuthenticated && (
             <div className="navbar">
                 <p>
-                    <Link to="/chatRooms">
+                    <Link to="/home">
                         Welcome
                         {user ? (
                             `, ${user.firstName}`

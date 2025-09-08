@@ -20,6 +20,8 @@ import Profile from "./Components/Profile/Profile";
 import AuthenticatedLayout from "./Components/AuthenticatedLayout/AuthenticatedLayout";
 import NavBar from "./Components/Layout/NavBar/NavBar";
 import Alert from "./Components/Layout/Alert";
+import Home from "./Components/Home/Home";
+import PrivateChat from "./Components/PrivateChat/PrivateChat";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -52,6 +54,8 @@ const App = () => {
 
                     <Route element={<PrivateRoute />}>
                         <Route element={<AuthenticatedLayout />}>
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/chat" element={<PrivateChat />} />
                             <Route
                                 path="/profile/:profileId"
                                 element={<Profile />}

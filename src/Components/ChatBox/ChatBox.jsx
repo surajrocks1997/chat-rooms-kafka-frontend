@@ -6,7 +6,7 @@ import Spinner from "../Spinner/Spinner";
 const ChatBox = ({
     chatRooms: { messages, isLoading },
     auth: {
-        user: { email },
+        user: { username },
     },
 }) => {
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ const ChatBox = ({
                     style={{
                         display: "flex",
                         flexDirection:
-                            email === message.username ? "row-reverse" : "row",
+                            username === message.username ? "row-reverse" : "row",
                     }}
                 >
                     <div className="user-image">
@@ -48,7 +48,7 @@ const ChatBox = ({
                         key={message.timestamp}
                         style={{
                             backgroundColor:
-                                email === message.username
+                                username === message.username
                                     ? "rgb(248, 239, 220)"
                                     : "white",
                         }}
@@ -56,7 +56,7 @@ const ChatBox = ({
                         <div className="chat-message-header">
                             <p
                                 className="username"
-                                onClick={() => openProfile(message.userId)}
+                                onClick={() => openProfile(message.username)}
                             >
                                 {message.username}
                             </p>

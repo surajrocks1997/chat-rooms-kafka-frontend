@@ -3,7 +3,7 @@
     justify-content: center;
 }
 
-.left-container{
+.left-container {
     display: flex;
     flex-direction: column;
     /* flex: 2; */
@@ -11,7 +11,7 @@
     max-width: 450px;
 }
 
-.room-insight{
+.room-insight {
     display: flex;
     color: white;
     justify-content: space-evenly;
@@ -83,18 +83,18 @@
     display: flex;
     width: 100%;
     margin-right: 5px;
-    height: 3.5vh;
-    border-radius: 20px;
+    height: 40px;
+    border-radius: 15px;
     font-size: 90%;
     padding: 3px 15px;
 }
 
 .input-container input:last-child {
-    border-radius: 20px;
+    border-radius: 15px;
     width: 10%;
 }
 
-.chat-spinner{
+.chat-spinner {
     display: flex;
     justify-content: center;
     height: 89%;
@@ -110,8 +110,6 @@
     flex-direction: column-reverse; /* This will make new messages appear at the bottom */
 
     width: 100%;
-    margin: 0 auto;
-    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -132,7 +130,7 @@
     max-width: 70%;
 }
 
-.chat-message-header{
+.chat-message-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -142,7 +140,7 @@
 .chat-message-header p:first-child:hover {
     text-decoration: underline;
     color: var(--dark-color);
-    cursor: pointer
+    cursor: pointer;
 }
 
 .username {
@@ -150,7 +148,7 @@
     font-weight: bold;
 }
 
-.timestamp{
+.timestamp {
     display: flex;
     align-items: end;
     /* flex: 1; */
