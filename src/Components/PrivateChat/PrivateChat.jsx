@@ -58,9 +58,15 @@ const PrivateChat = () => {
                             <div className="chat-box-fullname">John Doe</div>
                         </div>
                         <div className="features">
-                            <i className="feature fa-solid fa-phone fa-lg"></i>
-                            <i className="fa-solid fa-video fa-lg feature"></i>
-                            <i className="fa-solid fa-magnifying-glass fa-lg feature"></i>
+                            <div className="feature">
+                                <i className="fa-solid fa-phone fa-lg"></i>
+                            </div>
+                            <div className="feature">
+                                <i className="fa-solid fa-video fa-lg"></i>
+                            </div>
+                            <div className="feature">
+                                <i className="fa-solid fa-magnifying-glass fa-lg"></i>
+                            </div>
                         </div>
                     </div>
                     <div className="chat-page">
@@ -101,7 +107,17 @@ const PrivateChat = () => {
                                     </p>
                                     <p className="message">Hey there</p>
                                 </div>
-                                <p className="timestamp">16.04</p>
+                                <div className="message-insight">
+                                    <div className="recipet">
+                                        {/* <i className="fa-solid fa-check" style={{color: "black"}}></i> */}
+                                        {/* <i className="fa-solid fa-check-double" style={{color: "black"}}></i> */}
+                                        <i
+                                            className="fa-solid fa-check-double"
+                                            style={{ color: "green" }}
+                                        ></i>
+                                    </div>
+                                    <div className="timestamp">16.04</div>
+                                </div>
                             </div>
                         </div>
                     </div>

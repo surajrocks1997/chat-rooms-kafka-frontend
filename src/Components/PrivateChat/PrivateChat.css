@@ -91,12 +91,27 @@
     /* border-radius: 20px; */
 }
 
+.features {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .feature {
-    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    height: 50px;
+    width: 50px;
+    /* border: 2px solid red; */
 }
 
 .feature:hover {
     cursor: pointer;
+    background-color: white;
+    border-radius: 50%;
+    color: black;
 }
 
 .avatar {
@@ -104,13 +119,12 @@
     height: 45px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid white;
+    /* border: 1px solid white; */
 }
 .chat-message-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* flex: 13; */
 }
 
 .chat-message-header p:first-child:hover {
@@ -124,6 +138,19 @@
     font-weight: bold;
 }
 
+.message-insight{
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid red; */
+    align-items: end;
+    justify-content: space-between;
+}
+
+.recipet{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .timestamp {
     display: flex;
     align-items: end;
@@ -131,6 +158,7 @@
     justify-content: end;
     font-size: 0.7rem;
     padding-left: 10px;
+    /* border: 1px solid blue; */
 }
 
 .games-container {
@@ -141,7 +169,7 @@
     color: white;
 }
 
-.games-header{
+.games-header {
     font-weight: bold;
 }
 
@@ -160,6 +188,6 @@
     border: 1px solid white;
     height: 175px;
     width: 150px;
-    margin: 5px 10px;
+    margin: 10px 10px;
     border-radius: 15px;
 }

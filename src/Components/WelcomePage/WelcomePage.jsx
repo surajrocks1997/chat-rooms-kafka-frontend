@@ -79,7 +79,9 @@ const WelcomePage = ({
     });
 
     return loading ? (
-        <Spinner />
+       <div className="home-spinner">
+         <Spinner />
+       </div>
     ) : (
         <section className="landing">
             <div className="welcome-page">

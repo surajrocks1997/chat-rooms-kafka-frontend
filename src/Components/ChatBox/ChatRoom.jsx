@@ -140,7 +140,9 @@ const ChatRoom = ({
         <div className="parent-chat">
             <div className="left-container">
                 <div className="room-list">
-                    <p>Online</p>
+                    <div className="room-list-header">
+                        Online
+                    </div>
                     {Array.isArray(online) &&
                         online.map((user, index) => (
                             <div className="online-presence" key={index}>
@@ -150,8 +152,10 @@ const ChatRoom = ({
                         ))}
                 </div>
                 <div className="room-insight">
-                    <p>Total Online: {online.length}</p>
-                    <p>
+                    <div className="total-online">
+                        Total Online: {online.length}
+                    </div>
+                    <div className="total-message">
                         Total Messages:{" "}
                         {perChatRoomData.find(
                             (room) => room.chatRoomName === chatRoom
@@ -160,7 +164,7 @@ const ChatRoom = ({
                                   (room) => room.chatRoomName === chatRoom
                               ).count
                             : 0}
-                    </p>
+                    </div>
                 </div>
             </div>
 
@@ -168,9 +172,7 @@ const ChatRoom = ({
                 <Spinner />
             ) : (
                 <div className="chat-box chat-container">
-                    <div className="chat-container-header">
-                        <p>{chatRoom}</p>
-                    </div>
+                    <div className="chat-container-header">{chatRoom}</div>
 
                     <ChatBox />
                     <div className="input-container">
