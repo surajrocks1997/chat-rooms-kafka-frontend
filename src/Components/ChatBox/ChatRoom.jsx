@@ -10,6 +10,7 @@ import {
     clearActiveChatRoomState,
     fetchAllOnline,
     setChatLoading,
+    addMessageToState,
 } from "../../Actions/chat-rooms";
 import ChatBox from "./ChatBox";
 import Spinner from "../Spinner/Spinner";
@@ -21,6 +22,7 @@ import {
 } from "../../Actions/types";
 import OnlineGreeDot from "../OnlineGreenDot/OnlineGreenDot";
 import { useWebSocket } from "../../config/WebSocketProvider";
+import { v4 as uuidv4 } from "uuid";
 
 const ChatRoom = ({
     auth: { user, loading },
@@ -32,6 +34,7 @@ const ChatRoom = ({
     clearActiveChatRoomState,
     fetchAllOnline,
     setChatLoading,
+    addMessageToState,
 }) => {
     const { stompClient, sendMessage } = useWebSocket();
     const subscriptionref = useRef(null);
@@ -97,17 +100,37 @@ const ChatRoom = ({
 
     const handleSendMessage = () => {
         if (!chatText.trim()) return;
-        sendMessage(
+        const correlationId = uuidv4();
+        const datetime = new Date();
+        let options = {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        };
+        let formattedDateTime = new Intl.DateTimeFormat(
+            "en-US",
+            options
+        ).format(datetime);
+        var msg = {
+            correlationId,
+            messageType: CHAT_MESSAGE,
+            username: user.username,
+            userId: user.id,
+            chatRoomName: chatRoom,
+            timestamp: formattedDateTime,
+            message: chatText,
+        };
+        var response = sendMessage(
             `/app/chatRoom/${chatRoom}`,
-            {},
             {
-                messageType: CHAT_MESSAGE,
-                username: user.username,
-                userId: user.id,
-                chatRoomName: chatRoom,
-                message: chatText,
-            }
+                "x-correlation-id": correlationId,
+            },
+            msg
         );
+
+        addMessageToState(msg);
+
+        console.log("AFTER SEND MSG: " + response);
 
         //     /////////////////////////////////////////////////////////
         //     stompClient.send(
@@ -140,9 +163,7 @@ const ChatRoom = ({
         <div className="parent-chat">
             <div className="left-container">
                 <div className="room-list">
-                    <div className="room-list-header">
-                        Online
-                    </div>
+                    <div className="room-list-header">Online</div>
                     {Array.isArray(online) &&
                         online.map((user, index) => (
                             <div className="online-presence" key={index}>
@@ -211,6 +232,7 @@ ChatRoom.propTypes = {
     user: PropTypes.object,
     fetchAllOnline: PropTypes.func.isRequired,
     setChatLoading: PropTypes.func.isRequired,
+    addMessageToState: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -226,4 +248,5 @@ export default connect(mapStateToProps, {
     removeUserFromOnline,
     fetchAllOnline,
     setChatLoading,
+    addMessageToState,
 })(ChatRoom);

@@ -108,7 +108,7 @@ const PrivateChat = () => {
                                     <p className="message">Hey there</p>
                                 </div>
                                 <div className="message-insight">
-                                    <div className="recipet">
+                                    <div className="receipt">
                                         {/* <i className="fa-solid fa-check" style={{color: "black"}}></i> */}
                                         {/* <i className="fa-solid fa-check-double" style={{color: "black"}}></i> */}
                                         <i

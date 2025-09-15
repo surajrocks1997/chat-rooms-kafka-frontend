@@ -4,6 +4,8 @@ import {
     ADD_TO_ONLINE_LIST,
     CLEAR_CHAT_ROOM,
     LOADING_CHAT_ROOM,
+    RECEIPT_SENT_DELIVERED,
+    RECEIPT_SENT_LOCAL,
     REMOVE_FROM_ONLINE_LIST,
     SET_ACTIVE_CHAT_ROOM,
     SET_CHAT_LOADING,
@@ -17,19 +19,18 @@ export const setChatLoading = (isLoading) => (dispatch) => {
     });
 };
 
+export const addMessageToState = (message) => (dispatch) => {
+    message["state"] = RECEIPT_SENT_LOCAL;
+    const { messageType, chatRoomName, ...rest } = message;
+    dispatch({
+        type: ADD_MESSAGE,
+        payload: rest,
+    });
+};
+
 export const addMessage = (message) => (dispatch) => {
     const { messageType, chatRoomName, ...rest } = message;
-    const datetime = new Date();
-    let options = {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-    };
-    let formattedDateTime = new Intl.DateTimeFormat("en-US", options).format(
-        datetime
-    );
-    rest.timestamp = formattedDateTime;
-
+    rest["state"] = RECEIPT_SENT_DELIVERED;
     dispatch({
         type: ADD_MESSAGE,
         payload: rest,

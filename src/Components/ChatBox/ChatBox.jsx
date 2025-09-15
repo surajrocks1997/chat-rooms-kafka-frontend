@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../Spinner/Spinner";
+import { RECEIPT_SENT_LOCAL } from "../../Actions/types";
 
 const ChatBox = ({
     chatRooms: { messages, isLoading },
@@ -28,7 +29,9 @@ const ChatBox = ({
                     style={{
                         display: "flex",
                         flexDirection:
-                            username === message.username ? "row-reverse" : "row",
+                            username === message.username
+                                ? "row-reverse"
+                                : "row",
                     }}
                 >
                     <div className="user-image">
@@ -62,7 +65,25 @@ const ChatBox = ({
                             </p>
                             <p className="message">{message.message}</p>
                         </div>
-                        <p className="timestamp">{message.timestamp}</p>
+                        <div className="message-insight">
+                            <div className="receipt">
+                                {message.state === RECEIPT_SENT_LOCAL ? (
+                                    <i
+                                        className="{fa-solid fa-check}"
+                                        style={{ color: "black" }}
+                                    ></i>
+                                ) : (
+                                    <i
+                                        className="fa-solid fa-check-double"
+                                        style={{ color: "green" }}
+                                    ></i>
+                                )}
+                                {/* <i class="fa-regular fa-clock fa-xs" style={{color: "black"}}></i> */}
+
+                                {/* <i className="fa-solid fa-check-double" style={{color: "black"}}></i> */}
+                            </div>
+                            <div className="timestamp">{message.timestamp}</div>
+                        </div>
                     </div>
                 </div>
             ))}

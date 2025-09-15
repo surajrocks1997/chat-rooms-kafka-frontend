@@ -35,9 +35,25 @@ const chatRooms = (state = initState, action) => {
                 activeChatRoom: payload,
             };
         case ADD_MESSAGE:
+            const index = state.messages.findIndex(
+                (item) => item.correlationId === action.payload.correlationId
+            );
+
+            let updatedMessageState;
+
+            if (index !== -1) {
+                updatedMessageState = [
+                    ...state.messages.slice(0, index),
+                    action.payload,
+                    ...state.messages.slice(index + 1),
+                ];
+            } else {
+                updatedMessageState = [payload, ...state.messages];
+            }
+
             return {
                 ...state,
-                messages: [payload, ...state.messages],
+                messages: updatedMessageState,
             };
         case ADD_TO_ONLINE_LIST:
             return {
