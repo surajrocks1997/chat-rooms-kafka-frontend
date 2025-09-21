@@ -1,5 +1,6 @@
 import {
     FRIEND_REQUEST_SENT,
+    FRIENDS,
     GET_SOCIAL_INFO,
     POPULATE_VISITED_PROFILE,
     REMOVE_SOCIAL_INFO,
@@ -29,7 +30,7 @@ const socialInfo = (state = initialState, action) => {
         case GET_SOCIAL_INFO:
             return {
                 ...state,
-                relationshipMap: payload
+                relationshipMap: payload,
             };
         case FRIEND_REQUEST_SENT:
             return {
@@ -37,6 +38,14 @@ const socialInfo = (state = initialState, action) => {
                 relationshipMap: {
                     ...state.relationshipMap,
                     [payload]: FRIEND_REQUEST_SENT,
+                },
+            };
+        case FRIENDS:
+            return {
+                ...state,
+                relationshipMap: {
+                    ...state.relationshipMap,
+                    [payload]: FRIENDS,
                 },
             };
         case REMOVE_SOCIAL_INFO:

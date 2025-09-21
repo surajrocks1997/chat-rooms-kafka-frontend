@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SPRING_SERVER_URL } from "../config/uri";
 import {
+    FRIENDS,
     GET_SOCIAL_INFO,
     POPULATE_VISITED_PROFILE,
     SET_SOCIAL_LOADING,
@@ -32,5 +33,14 @@ export const setSocialInfoIsLoading = (isLoading) => (dispatch) => {
     dispatch({
         type: SET_SOCIAL_LOADING,
         payload: isLoading,
+    });
+};
+
+export const acceptFriendRequest = (id) => async (dispatch) => {
+    await axios.post(`${SPRING_SERVER_URL}/social/friendship/accept/${id}`);
+
+    dispatch({
+        type: FRIENDS,
+        payload: id,
     });
 };

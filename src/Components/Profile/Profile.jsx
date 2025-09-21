@@ -4,33 +4,33 @@ import PropTypes from "prop-types";
 import Spinner from "../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { visitedUserData } from "../../Actions/profile";
+import {
+    acceptFriendRequest,
+    setSocialInfoIsLoading,
+    visitedUserData,
+} from "../../Actions/profile";
 import { sendFriendRequest, userSocialDetailRes } from "../../Actions/social";
 import {
     FRIEND_REQUEST_RECEIVED,
     FRIEND_REQUEST_SENT,
+    FRIENDS,
 } from "../../Actions/types";
 
 const Profile = ({
     auth: { user },
-    socialInfo: {
-        isLoading,
-        visitedProfile: vprofile,
-        frSent,
-        frPending,
-        relationshipMap,
-    },
+    socialInfo: { isLoading, visitedProfile: vprofile, relationshipMap },
     visitedUserData,
     sendFriendRequest,
-    userSocialDetailRes,
+    acceptFriendRequest,
 }) => {
     const { profileId } = useParams();
 
     useEffect(() => {
-        if (user !== null) {
-            visitedUserData(profileId);
-            // userSocialDetailRes(user.id);
+        setSocialInfoIsLoading(true);
+        if (user == null) {
         }
+
+        visitedUserData(profileId);
     }, [profileId, user]);
 
     const sendFR = () => {
@@ -70,50 +70,60 @@ const Profile = ({
                         <p>{vprofile.firstName + " " + vprofile.lastName} </p>
                     </div>
                 </div>
-                {user.id !== vprofile.id && relationshipMap[vprofile.id]["status"] ===
-                FRIEND_REQUEST_RECEIVED ? (
-                    <div className="header-section">
-                        <button
-                            className="btn btn-success"
-                            // onClick={}
-                        >
-                            Accept
-                        </button>
-                        <button
-                            className="btn btn-danger"
-                            // onClick={}
-                        >
-                            Reject
-                        </button>
-                    </div>
-                ) : (
-                    vprofile.id !== user.id && (
-                        <div className="header-section">
-                            <button
-                                disabled={
-                                    relationshipMap[vprofile.id]["status"] ===
-                                    FRIEND_REQUEST_SENT
-                                }
-                                className={
-                                    relationshipMap[vprofile.id] !== undefined
-                                        ? "btn btn-light"
-                                        : "btn btn-primary"
-                                }
-                                onClick={sendFR}
-                            >
-                                {relationshipMap[vprofile.id]["status"] ===
-                                FRIEND_REQUEST_SENT ? (
-                                    <>
-                                        <span>Friend Request Sent </span>
-                                        <i className="fa-solid fa-check"></i>
-                                    </>
-                                ) : (
-                                    "Send Friend Request"
-                                )}
-                            </button>
-                        </div>
-                    )
-                )}
+                {(() => {
+                    if (user.id !== vprofile.id) {
+                        const status = relationshipMap[vprofile.id]?.status;
+
+                        if (status === FRIEND_REQUEST_RECEIVED) {
+                            return (
+                                <div className="header-section">
+                                    <button
+                                        className="btn btn-success"
+                                        onClick={() =>
+                                            acceptFriendRequest(relationshipMap[vprofile.id]["id"])
+                                        }
+                                    >
+                                        Accept
+                                    </button>
+                                    <button className="btn btn-danger">
+                                        Reject
+                                    </button>
+                                </div>
+                            );
+                        }
+
+                        if (status === FRIEND_REQUEST_SENT) {
+                            return (
+                                <div className="header-section">
+                                    <button disabled className="btn btn-light">
+                                        Friend Request Sent
+                                    </button>
+                                </div>
+                            );
+                        }
+
+                        if (status === FRIENDS) {
+                            return (
+                                <div className="header-section">
+                                    <button disabled className="btn btn-success">
+                                        Friends
+                                    </button>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <div className="header-section">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={sendFR}
+                                >
+                                    Send Friend Request
+                                </button>
+                            </div>
+                        );
+                    }
+                })()}
             </div>
         </div>
     );
@@ -127,6 +137,7 @@ Profile.propTypes = {
     visitedUserData: PropTypes.func.isRequired,
     sendFriendRequest: PropTypes.func.isRequired,
     userSocialDetailRes: PropTypes.func.isRequired,
+    acceptFriendRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -138,4 +149,5 @@ export default connect(mapStateToProps, {
     visitedUserData,
     sendFriendRequest,
     userSocialDetailRes,
+    acceptFriendRequest,
 })(Profile);
