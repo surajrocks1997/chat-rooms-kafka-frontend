@@ -28,7 +28,7 @@ export const userSocialDetailRes = (userId) => async (dispatch) => {
 
 export const sendFriendRequest = (receiverId) => async (dispatch) => {
     try {
-        axios.get(`${SPRING_SERVER_URL}/sendFR/${receiverId}`, {
+        await axios.post(`${SPRING_SERVER_URL}/social/friend/request/${receiverId}`, {
             withCredentials: true,
         });
 

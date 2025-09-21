@@ -33,7 +33,7 @@ export const googleAuth = (authCode) => async (dispatch) => {
             },
         };
         const res = await axios.get(
-            `${AUTH_SERVER_URL}/google/auth/token`,
+            `${AUTH_SERVER_URL}/auth/google/token`,
             config
         );
 
@@ -69,7 +69,7 @@ export const signUp =
 
         try {
             const res = await axios.post(
-                `${AUTH_SERVER_URL}/auth/user`,
+                `${AUTH_SERVER_URL}/auth/local/user`,
                 body,
                 config
             );
@@ -122,7 +122,7 @@ export const login =
 
         try {
             const res = await axios.post(
-                `${AUTH_SERVER_URL}/auth`,
+                `${AUTH_SERVER_URL}/auth/local`,
                 body,
                 config
             );
@@ -150,7 +150,7 @@ export const login =
     };
 
 const refreshToken = async (dispatch) => {
-    const res = await axios.get(`${AUTH_SERVER_URL}/auth/refresh`);
+    const res = await axios.get(`${AUTH_SERVER_URL}/auth/local/refresh`);
     await dispatch({
         type: REFRESH_TOKEN_SUCCESS,
         payload: res.data,

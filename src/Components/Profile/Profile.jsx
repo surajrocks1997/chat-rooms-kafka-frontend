@@ -4,13 +4,23 @@ import PropTypes from "prop-types";
 import Spinner from "../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { fetchUserData } from "../../Actions/profile";
+import { visitedUserData } from "../../Actions/profile";
 import { sendFriendRequest, userSocialDetailRes } from "../../Actions/social";
+import {
+    FRIEND_REQUEST_RECEIVED,
+    FRIEND_REQUEST_SENT,
+} from "../../Actions/types";
 
 const Profile = ({
     auth: { user },
-    socialInfo: { isLoading, visitedProfile: vprofile, frSent, frPending },
-    fetchUserData,
+    socialInfo: {
+        isLoading,
+        visitedProfile: vprofile,
+        frSent,
+        frPending,
+        relationshipMap,
+    },
+    visitedUserData,
     sendFriendRequest,
     userSocialDetailRes,
 }) => {
@@ -18,17 +28,24 @@ const Profile = ({
 
     useEffect(() => {
         if (user !== null) {
-            fetchUserData(profileId);
+            visitedUserData(profileId);
             // userSocialDetailRes(user.id);
         }
     }, [profileId, user]);
 
     const sendFR = () => {
-        sendFriendRequest(profileId);
+        sendFriendRequest(vprofile.id);
     };
 
     return isLoading || user === null ? (
-        <Spinner />
+        <div
+            className="home-spinner"
+            style={{
+                height: "calc(100vh - var(--navBar-height))",
+            }}
+        >
+            <Spinner />
+        </div>
     ) : (
         <div className="profile-page">
             <div className="header">
@@ -53,7 +70,8 @@ const Profile = ({
                         <p>{vprofile.firstName + " " + vprofile.lastName} </p>
                     </div>
                 </div>
-                {frPending.some((ele) => ele.id === Number(vprofile.id)) ? (
+                {user.id !== vprofile.id && relationshipMap[vprofile.id]["status"] ===
+                FRIEND_REQUEST_RECEIVED ? (
                     <div className="header-section">
                         <button
                             className="btn btn-success"
@@ -72,14 +90,19 @@ const Profile = ({
                     vprofile.id !== user.id && (
                         <div className="header-section">
                             <button
+                                disabled={
+                                    relationshipMap[vprofile.id]["status"] ===
+                                    FRIEND_REQUEST_SENT
+                                }
                                 className={
-                                    frSent.includes(profileId)
+                                    relationshipMap[vprofile.id] !== undefined
                                         ? "btn btn-light"
                                         : "btn btn-primary"
                                 }
                                 onClick={sendFR}
                             >
-                                {frSent.includes(profileId) ? (
+                                {relationshipMap[vprofile.id]["status"] ===
+                                FRIEND_REQUEST_SENT ? (
                                     <>
                                         <span>Friend Request Sent </span>
                                         <i className="fa-solid fa-check"></i>
@@ -101,7 +124,7 @@ Profile.propTypes = {
     loading: PropTypes.bool,
     isLoading: PropTypes.bool,
     visitedProfile: PropTypes.object,
-    fetchUserData: PropTypes.func.isRequired,
+    visitedUserData: PropTypes.func.isRequired,
     sendFriendRequest: PropTypes.func.isRequired,
     userSocialDetailRes: PropTypes.func.isRequired,
 };
@@ -112,7 +135,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-    fetchUserData,
+    visitedUserData,
     sendFriendRequest,
     userSocialDetailRes,
 })(Profile);

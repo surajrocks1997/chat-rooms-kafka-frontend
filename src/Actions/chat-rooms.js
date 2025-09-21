@@ -40,7 +40,7 @@ export const addMessage = (message) => (dispatch) => {
 export const fetchAllOnline = (chatRoom) => async (dispatch) => {
     try {
         const res = await axios.get(
-            `${SPRING_SERVER_URL}/user/chatRooms/${chatRoom}/online`
+            `${SPRING_SERVER_URL}/chatRooms/${chatRoom}/online`
         );
         dispatch({
             type: ADD_TO_ONLINE_LIST,

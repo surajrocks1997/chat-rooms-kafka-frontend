@@ -32,7 +32,7 @@ const NavBar = ({
 
     const FriendRequestsDropdown = () => (
         <div className="dropdown-content">
-            {frPending.length > 0 ? (
+            {true ? (
                 frPending.map((item) => (
                     <div className="frdd" key={item.email}>
                         <div className="profile-photo">
@@ -81,9 +81,9 @@ const NavBar = ({
                             style={{ color: "#ffffff" }}
                         ></i>
                     </Link>
-                    {frPending.length > 0 && (
+                    {true && (
                         <span className="button__badge">
-                            {frPending.length}
+                            {0}
                         </span>
                     )}
                 </div>

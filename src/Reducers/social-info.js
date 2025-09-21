@@ -3,37 +3,41 @@ import {
     GET_SOCIAL_INFO,
     POPULATE_VISITED_PROFILE,
     REMOVE_SOCIAL_INFO,
+    SET_SOCIAL_LOADING,
 } from "../Actions/types";
 
 const initialState = {
     visitedProfile: null,
     isLoading: true,
-    friends: [],
-    frPending: [],
-    frSent: [],
+    relationshipMap: {},
 };
 
 const socialInfo = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case SET_SOCIAL_LOADING:
+            return {
+                ...state,
+                isLoading: payload,
+            };
         case POPULATE_VISITED_PROFILE:
             return {
                 ...state,
                 visitedProfile: payload,
-                isLoading: false,
             };
         case GET_SOCIAL_INFO:
             return {
                 ...state,
-                friends: payload.friendIds,
-                frPending: payload.friendRequestDetails.received.pending,
-                frSent: payload.friendRequestDetails.sent,
+                relationshipMap: payload
             };
         case FRIEND_REQUEST_SENT:
             return {
                 ...state,
-                frSent: [...state.frSent, payload],
+                relationshipMap: {
+                    ...state.relationshipMap,
+                    [payload]: FRIEND_REQUEST_SENT,
+                },
             };
         case REMOVE_SOCIAL_INFO:
             return initialState;

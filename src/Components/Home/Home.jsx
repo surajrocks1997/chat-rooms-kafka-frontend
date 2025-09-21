@@ -1,17 +1,23 @@
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getSocialSummary } from "../../Actions/profile";
 
-const Home = () => {
+const Home = ({ getSocialSummary }) => {
+    useEffect(() => {
+        getSocialSummary();
+    });
 
     const navigate = useNavigate();
     const openChatRoomPage = () => {
         navigate("/chatRooms");
-    }
+    };
 
     const privateChatPage = () => {
         navigate("/chat");
-    }
+    };
 
     return (
         <div className="home-page">
@@ -32,9 +38,7 @@ const Home = () => {
                         <div className="chatrooms">7 Chat Rooms</div>
                         <div className="online">23 Online</div>
                     </div>
-                    <div className="tile-title">
-                        Chat rooms
-                    </div>
+                    <div className="tile-title">Chat rooms</div>
                     <div className="description">
                         Explore various chat rooms and join the ones you like to
                         discuss and share your views.
@@ -45,4 +49,10 @@ const Home = () => {
     );
 };
 
-export default connect()(Home);
+Home.propTypes = {
+    getSocialSummary: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({});
+
+export default connect(mapStateToProps, { getSocialSummary })(Home);

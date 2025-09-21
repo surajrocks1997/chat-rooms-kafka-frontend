@@ -65,23 +65,33 @@ const ChatBox = ({
                             </p>
                             <p className="message">{message.message}</p>
                         </div>
-                        <div className="message-insight">
-                            <div className="receipt">
-                                {message.state === RECEIPT_SENT_LOCAL ? (
-                                    <i
-                                        className="{fa-solid fa-check}"
-                                        style={{ color: "black" }}
-                                    ></i>
-                                ) : (
-                                    <i
-                                        className="fa-solid fa-check-double"
-                                        style={{ color: "green" }}
-                                    ></i>
-                                )}
-                                {/* <i class="fa-regular fa-clock fa-xs" style={{color: "black"}}></i> */}
+                        <div
+                            className="message-insight"
+                            style={{
+                                justifyContent:
+                                    username !== message.username
+                                        ? "flex-end"
+                                        : "space-between",
+                            }}
+                        >
+                            {username === message.username && (
+                                <div className="receipt">
+                                    {message.state === RECEIPT_SENT_LOCAL ? (
+                                        <i
+                                            className="fa-solid fa-check"
+                                            style={{ color: "black" }}
+                                        ></i>
+                                    ) : (
+                                        <i
+                                            className="fa-solid fa-check-double"
+                                            style={{ color: "green" }}
+                                        ></i>
+                                    )}
+                                    {/* <i class="fa-regular fa-clock fa-xs" style={{color: "black"}}></i> */}
 
-                                {/* <i className="fa-solid fa-check-double" style={{color: "black"}}></i> */}
-                            </div>
+                                    {/* <i className="fa-solid fa-check-double" style={{color: "black"}}></i> */}
+                                </div>
+                            )}
                             <div className="timestamp">{message.timestamp}</div>
                         </div>
                     </div>
