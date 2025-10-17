@@ -53,8 +53,8 @@ const Profile = ({
                     <div className="profile-photo">
                         <img
                             src={
-                                vprofile.profilePictureUrl !== null
-                                    ? vprofile.profilePictureUrl
+                                vprofile.avatar !== null
+                                    ? vprofile.avatar
                                     : "https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
                             }
                             alt="User Profile"

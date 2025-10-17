@@ -10,6 +10,24 @@ import {
 export const visitedUserData = (userId) => async (dispatch) => {
     var visitedProfile = await axios.get(`${SPRING_SERVER_URL}/user/${userId}`);
 
+    try {
+        var image = await axios.get(
+            `${SPRING_SERVER_URL}/media/${visitedProfile.data.profilePictureMongoId}`,
+            {
+                responseType: "blob",
+            }
+        );
+        const url = URL.createObjectURL(image.data);
+
+        visitedProfile.data["avatar"] = url;
+    } catch (error) {
+        const text = await error.response.data.text(); // Convert blob to text
+        const errorResponse = JSON.parse(text);
+        console.log("Image fetch failed:", errorResponse.errorMessage);
+        visitedProfile.data["avatar"] =
+            "https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png";
+    }
+
     dispatch({
         type: POPULATE_VISITED_PROFILE,
         payload: visitedProfile.data,
