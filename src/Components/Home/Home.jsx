@@ -53,6 +53,8 @@ Home.propTypes = {
     getSocialSummary: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
 
 export default connect(mapStateToProps, { getSocialSummary })(Home);

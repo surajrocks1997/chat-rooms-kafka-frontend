@@ -48,6 +48,10 @@ const ChatRoom = ({
     const { topicName } = location.state || {};
 
     useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
+
+    useEffect(() => {
         if (!chatRoom || !user || !topicName) {
             navigate("/chatRooms");
             return;
@@ -79,15 +83,11 @@ const ChatRoom = ({
             subscriptionref.current = stompClient.subscribe(
                 `/topic/chatRoom.${chatRoom}`,
                 onMessageRecieved,
-                { id: chatRoom }
+                { id: `chatRoom_${chatRoom}` },
             );
             setChatLoading(true);
         } else {
             console.warn("Stomp Client is not connected yet");
-        }
-
-        if (inputRef.current) {
-            inputRef.current.focus();
         }
 
         return () => {
@@ -109,7 +109,7 @@ const ChatRoom = ({
         };
         let formattedDateTime = new Intl.DateTimeFormat(
             "en-US",
-            options
+            options,
         ).format(datetime);
         var msg = {
             correlationId,
@@ -125,26 +125,27 @@ const ChatRoom = ({
             {
                 "x-correlation-id": correlationId,
             },
-            msg
+            msg,
         );
 
         addMessageToState(msg);
 
         console.log("AFTER SEND MSG: " + response);
 
-        //     /////////////////////////////////////////////////////////
-        //     stompClient.send(
-        //         `/app/privateMessage/jdoe@email.com`,
-        //         {},
-        //         JSON.stringify({
-        //             messageType: "PRIVATE_MESSAGE",
-        //             username: user.email,
-        //             // userId: user.id,
-        //             receiver: "jdoe@email.com",
-        //             message: chatText,
-        //         })
-        //     );
-        //     /////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////
+        // ONE TO ONE CHAT FEATURE TESTING
+        stompClient.send(
+            `/app/privateMessage/jdoe`,
+            {},
+            JSON.stringify({
+                messageType: "PRIVATE_MESSAGE",
+                username: user.username,
+                // userId: user.id,
+                // receiver: "jdoe",
+                message: chatText,
+            }),
+        );
+        /////////////////////////////////////////////////////////
 
         setChatText("");
     };
@@ -179,10 +180,10 @@ const ChatRoom = ({
                     <div className="total-message">
                         Total Messages:{" "}
                         {perChatRoomData.find(
-                            (room) => room.chatRoomName === chatRoom
+                            (room) => room.chatRoomName === chatRoom,
                         )
                             ? perChatRoomData.find(
-                                  (room) => room.chatRoomName === chatRoom
+                                  (room) => room.chatRoomName === chatRoom,
                               ).count
                             : 0}
                     </div>
