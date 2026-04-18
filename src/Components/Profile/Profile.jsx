@@ -72,15 +72,36 @@ const Profile = ({
                 </div>
                 {(() => {
                     if (user.id !== vprofile.id) {
-                        const status = relationshipMap[vprofile.id]?.status;
-
-                        if (status === FRIEND_REQUEST_RECEIVED) {
+                        if (relationshipMap["FRIENDS"]?.includes(vprofile.id)) {
+                            return (
+                                <div className="header-section">
+                                    <button
+                                        disabled
+                                        className="btn btn-success"
+                                    >
+                                        Friends
+                                    </button>
+                                </div>
+                            );
+                        } else if (
+                            relationshipMap["SentFRs"]?.includes(vprofile.id)
+                        ) {
+                            return (
+                                <div className="header-section">
+                                    <button disabled className="btn btn-light">
+                                        Friend Request Sent
+                                    </button>
+                                </div>
+                            );
+                        } else if (
+                            relationshipMap["PendingFRs"]?.includes(vprofile.id)
+                        ) {
                             return (
                                 <div className="header-section">
                                     <button
                                         className="btn btn-success"
                                         onClick={() =>
-                                            acceptFriendRequest(relationshipMap[vprofile.id]["id"])
+                                            acceptFriendRequest(vprofile.id)
                                         }
                                     >
                                         Accept
@@ -90,38 +111,17 @@ const Profile = ({
                                     </button>
                                 </div>
                             );
-                        }
-
-                        if (status === FRIEND_REQUEST_SENT) {
+                        } else
                             return (
                                 <div className="header-section">
-                                    <button disabled className="btn btn-light">
-                                        Friend Request Sent
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={sendFR}
+                                    >
+                                        Send Friend Request
                                     </button>
                                 </div>
                             );
-                        }
-
-                        if (status === FRIENDS) {
-                            return (
-                                <div className="header-section">
-                                    <button disabled className="btn btn-success">
-                                        Friends
-                                    </button>
-                                </div>
-                            );
-                        }
-
-                        return (
-                            <div className="header-section">
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={sendFR}
-                                >
-                                    Send Friend Request
-                                </button>
-                            </div>
-                        );
                     }
                 })()}
             </div>

@@ -32,7 +32,7 @@ const NavBar = ({
 
     const FriendRequestsDropdown = () => (
         <div className="dropdown-content">
-            {true ? (
+            {false ? (
                 frPending.map((item) => (
                     <div className="frdd" key={item.email}>
                         <div className="profile-photo">

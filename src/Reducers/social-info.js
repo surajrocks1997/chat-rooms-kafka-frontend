@@ -10,7 +10,11 @@ import {
 const initialState = {
     visitedProfile: null,
     isLoading: true,
-    relationshipMap: {},
+    relationshipMap: {
+        FRIENDS: [],
+        SentFRs: [],
+        PendingFRs: [],
+    },
 };
 
 const socialInfo = (state = initialState, action) => {
@@ -37,7 +41,7 @@ const socialInfo = (state = initialState, action) => {
                 ...state,
                 relationshipMap: {
                     ...state.relationshipMap,
-                    [payload]: FRIEND_REQUEST_SENT,
+                    SentFRs: [...state.relationshipMap.SentFRs, payload],
                 },
             };
         case FRIENDS:
@@ -45,7 +49,10 @@ const socialInfo = (state = initialState, action) => {
                 ...state,
                 relationshipMap: {
                     ...state.relationshipMap,
-                    [payload]: FRIENDS,
+                    FRIENDS: [...state.relationshipMap.FRIENDS, payload],
+                    PendingFRs: state.relationshipMap.PendingFRs.filter(
+                        (id) => id !== payload,
+                    ),
                 },
             };
         case REMOVE_SOCIAL_INFO:
