@@ -8,7 +8,7 @@
     flex-direction: row;
 }
 
-.online-container {
+.chat-container {
     flex: 1;
 
     display: flex;
@@ -17,7 +17,7 @@
     color: white;
 }
 
-.online-header {
+.chat-header {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -25,19 +25,68 @@
     font-weight: 700;
 }
 
-.online-section {
-    margin: 20px 10px;
+.chat-section {
+    margin: 10px 0;
 }
 
-.online-presence {
+.chat-box {
     display: flex;
-    height: 30px;
-    padding: 5px 20px;
-    margin: 5px 10px;
+    height: 70px;
+    padding: 5px 10px;
+    margin: 10px 10px;
     background-color: #647ca4;
     color: white;
     border-radius: 15px;
     /* border: 1px solid white; */
+}
+
+.chat-box .section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    /* border: 1px solid white; */
+}
+
+.chat-list-avatar{
+    width: 75px;
+    height: 75px;
+}
+
+.chat-list-details{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* border: 1px solid white; */
+    margin: 0px 0px 0px 10px;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+.chat-detail-top-section{
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.chat-list-username{
+    font-weight: 725;
+}
+
+.lastMessageTime{
+    font-size: small;
+}
+
+.chat-detail-bottom-section{
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* height: 100%; */
+}
+
+.lastMessage{
+    opacity: 80%;
 }
 
 .green-dot {
@@ -69,12 +118,13 @@
 .profile-details {
     display: flex;
     align-items: center;
-    height: 85px;
+    /* height: 85px; */
     /* border: 1px solid red; */
 }
 
 .profile-details .avatar {
     margin: 20px 20px;
+    /* border: 1px solid red; */
 }
 
 .profile-details .chat-box-fullname {

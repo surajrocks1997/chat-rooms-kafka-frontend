@@ -7,44 +7,124 @@ const PrivateChat = () => {
     return (
         <div className="private-chat">
             <div className="section-container">
-                <div className="online-container">
+                <div className="chat-container">
                     <div className="top-section">
-                        <div className="online-header">
-                            <div className="header-section">Online</div>
+                        <div className="chat-header">
+                            <div className="header-section">Chat</div>
                         </div>
-                        <div className="online-section">
-                            <div className="online-presence">
-                                <div className="green-dot">
-                                    <OnlineGreeDot />
+                        <div className="chat-section">
+                            <div className="chat-box">
+                                <div className="section">
+                                    <div className="profile-details">
+                                        <img
+                                            className="chat-list-avatar"
+                                            src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
+                                            alt="Profile"
+                                        />
+                                    </div>
+                                    <div className="chat-list-details">
+                                        <div className="chat-detail-top-section">
+                                            <div className="chat-list-username">
+                                                surajrocks1997
+                                            </div>
+                                            <div className="lastMessageTime">
+                                                2.30 PM
+                                            </div>
+                                        </div>
+                                        <div className="chat-detail-bottom-section">
+                                            <div className="lastMessage">
+                                                Limit Text to 40 Chars followed by ...
+                                            </div>
+
+                                            <div className="msgStatus">
+                                                <i
+                                                    className="fa-solid fa-check-double"
+                                                    style={{
+                                                        color: "white",
+                                                    }}
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="fullname">John Doe</div>
-                                <div className="username">@ jdoe</div>
                             </div>
-                            <div className="online-presence">
-                                <div className="green-dot">
-                                    <OnlineGreeDot />
+                            <div className="chat-box">
+                                <div className="section">
+                                    <div className="profile-details">
+                                        <img
+                                            className="chat-list-avatar"
+                                            src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
+                                            alt="Profile"
+                                        />
+                                    </div>
+                                    <div className="chat-list-details">
+                                        <div className="chat-detail-top-section">
+                                            <div className="chat-list-username">
+                                                scary-instructions-123
+                                            </div>
+                                            <div className="lastMessageTime">
+                                                12.11 PM
+                                            </div>
+                                        </div>
+                                        <div className="chat-detail-bottom-section">
+                                            <div className="lastMessage">
+                                                Hey There!
+                                            </div>
+
+                                            <div className="msgStatus">
+                                                <i
+                                                    className="fa-solid fa-check-double"
+                                                    style={{
+                                                        color: "white",
+                                                    }}
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="fullname">Williams Carl</div>
-                                <div className="username">@ wcarl</div>
                             </div>
-                            <div className="online-presence">
-                                <div className="green-dot">
-                                    <OnlineGreeDot />
+                            <div className="chat-box">
+                                <div className="section">
+                                    <div className="profile-details">
+                                        <img
+                                            className="chat-list-avatar"
+                                            src="https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png"
+                                            alt="Profile"
+                                        />
+                                    </div>
+                                    <div className="chat-list-details">
+                                        <div className="chat-detail-top-section">
+                                            <div className="chat-list-username">
+                                                jdoe
+                                            </div>
+                                            <div className="lastMessageTime">
+                                                20 April
+                                            </div>
+                                        </div>
+                                        <div className="chat-detail-bottom-section">
+                                            <div className="lastMessage">
+                                                Hey! how are you? Hey! how are
+                                                you?
+                                            </div>
+
+                                            <div className="msgStatus">
+                                                <i
+                                                    className="fa-solid fa-check-double"
+                                                    style={{
+                                                        color: "white",
+                                                    }}
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="fullname">Simpal Diety</div>
-                                <div className="username">@ samplyd</div>
-                            </div>
-                            <div className="online-presence">
-                                <div className="green-dot">
-                                    <OnlineGreeDot />
-                                </div>
-                                <div className="fullname">Serena Gonzalez</div>
-                                <div className="username">@ serenaz</div>
                             </div>
                         </div>
                     </div>
                     <div className="online-footer">
-                        <div className="footer-section">Total Online: 4</div>
+                        <div className="footer-section">
+                            Total Online: 3 / 24
+                        </div>
                     </div>
                 </div>
                 <div className="chat-box-container">
