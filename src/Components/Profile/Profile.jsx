@@ -74,13 +74,20 @@ const Profile = ({
                     if (user.id !== vprofile.id) {
                         if (relationshipMap["FRIENDS"]?.includes(vprofile.id)) {
                             return (
-                                <div className="header-section">
-                                    <button
-                                        disabled
-                                        className="btn btn-success"
-                                    >
-                                        Friends
-                                    </button>
+                                <div className="right-header-section">
+                                    <div className="friends-btn">
+                                        <button
+                                            disabled
+                                            className="btn btn-success"
+                                        >
+                                            Friends
+                                        </button>
+                                    </div>
+                                    <div className="message-btn">
+                                        <button disabled className="btn btn-light">
+                                            Message
+                                        </button>
+                                    </div>
                                 </div>
                             );
                         } else if (

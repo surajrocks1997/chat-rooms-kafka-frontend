@@ -8,7 +8,7 @@
     flex-direction: row;
 }
 
-.chat-container {
+.section-container .chat-container {
     flex: 1;
 
     display: flex;
@@ -29,7 +29,7 @@
     margin: 10px 0;
 }
 
-.chat-box {
+.chat-section .chat-box {
     display: flex;
     height: 70px;
     padding: 5px 10px;
@@ -183,7 +183,7 @@
     cursor: pointer;
 }
 
-.username {
+.chat-message-header .username {
     flex: 2;
     font-weight: bold;
 }

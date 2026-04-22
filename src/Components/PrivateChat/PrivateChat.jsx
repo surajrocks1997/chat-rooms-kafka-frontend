@@ -183,7 +183,7 @@ const PrivateChat = () => {
                                         className="username"
                                         // onClick={() => openProfile(message.username)}
                                     >
-                                        jdoe
+                                        surajrocks1997
                                     </p>
                                     <p className="message">Hey there</p>
                                 </div>
